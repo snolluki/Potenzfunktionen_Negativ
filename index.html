@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Potenzfunktionen mit negativen Exponenten</title>
+<style>
+:root{
+  --bg:#f5f6f8; --panel:#ffffff; --text:#1f2937; --muted:#6b7280; --line:#e2e5ea;
+  --grid:#eceff3; --axis:#374151; --accent:#2563eb; --accent-soft:#e0eaff;
+  --ok:#15803d; --ok-soft:#dcfce7; --lock:#9ca3af; --warn-soft:#fff7e0; --warn:#92600a;
+  --bad:#b91c1c; --bad-soft:#fde8e8; --ref:#8b95a5;
+}
+@media (prefers-color-scheme: dark){
+  body:not(.lk){
+    --bg:#111827; --panel:#1c2433; --text:#f3f4f6; --muted:#9ca3af; --line:#334155;
+    --grid:#253044; --axis:#d1d5db; --accent:#60a5fa; --accent-soft:#1e3a5f;
+    --ok:#4ade80; --ok-soft:#153d25; --lock:#6b7280; --warn-soft:#3a2f12; --warn:#f5c65b;
+    --bad:#f87171; --bad-soft:#3b1a1a; --ref:#8b95a5;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:17px;line-height:1.4;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit}
+.hidden{display:none !important}
+.math{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin:0 .1em}
+.frac>span:first-child{border-bottom:2px solid currentColor;padding:0 .2em}
+.frac>span{padding:0 .1em}
+sup{font-size:.62em}
+
+/* ---------- Kopf ---------- */
+header.top{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;flex-wrap:wrap}
+header.top h1{font-size:1.05rem;margin:0 auto 0 0;user-select:none;-webkit-user-select:none}
+.badge{background:var(--accent-soft);color:var(--text);border:1px solid var(--accent);border-radius:999px;padding:3px 12px;font-weight:700;font-size:.95rem;white-space:nowrap}
+.linkbtn{background:none;border:0;color:var(--accent);text-decoration:underline;cursor:pointer;padding:4px;font-size:.9rem}
+
+/* ---------- Karten, Knöpfe ---------- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.card h2{font-size:1.02rem;margin:0 0 8px}
+.btn{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 14px;font-size:1rem;cursor:pointer;min-height:44px}
+.btn.on{background:var(--accent-soft);border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff;font-weight:700}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.input{font:inherit;font-size:1.3rem;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);width:100%}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#111827;color:#fff;padding:12px 18px;border-radius:12px;z-index:100;max-width:92vw;font-size:.98rem;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.toast.bad{background:var(--bad)}
+
+/* ---------- Bildschirme (Anmeldung, Sperre …) ---------- */
+.screen{max-width:640px;margin:0 auto;padding:18px 14px 40px}
+.screen h2{font-size:1.25rem;margin:6px 0 12px}
+.screen p{margin:0 0 12px}
+.big-msg{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:20px}
+.big-msg .icon{font-size:3.4rem}
+.big-msg h2{font-size:1.5rem;margin:0}
+.big-msg p{font-size:1.1rem;max-width:30em;margin:0}
+.grid-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.grid-g button{min-height:64px;font-size:1.15rem;font-weight:700;border-radius:12px;border:1px solid var(--line);background:var(--panel);cursor:pointer}
+.grid-g button small{display:block;font-weight:400;font-size:.8rem;color:var(--muted)}
+.sp-list{display:flex;flex-direction:column;gap:10px}
+.sp-btn{display:flex;gap:12px;align-items:flex-start;text-align:left;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:12px;cursor:pointer;width:100%}
+.sp-btn .nr{flex:0 0 44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:1.3rem;display:flex;align-items:center;justify-content:center}
+.sp-btn b{display:block;font-size:1.05rem}
+.sp-btn span.q{display:block;font-size:.9rem;color:var(--muted);margin-top:2px}
+.sp-btn:disabled{cursor:not-allowed;opacity:.55}
+.sp-btn:disabled .nr{background:var(--lock)}
+.sp-btn .tag{display:inline-block;margin-top:4px;font-size:.8rem;font-weight:700;color:var(--bad)}
+
+/* ---------- Arbeitsansicht (Lernende) ---------- */
+.work{display:grid;gap:12px;padding:12px;grid-template-columns:1fr;grid-template-areas:"auftrag" "graph" "regler" "tabelle" "hilfen"}
+.work .auftrag{grid-area:auftrag}
+.work .graphbox{grid-area:graph}
+.work .regler{grid-area:regler}
+.work .tabelle{grid-area:tabelle}
+.work .hilfen{grid-area:hilfen}
+.kurz{display:none}
+@media (max-width:899px){
+  header.top h1 .lang{display:none}
+  header.top h1 .kurz{display:inline}
+  .work .graphbox{position:sticky;top:var(--hh,52px);z-index:5;height:42vh;min-height:230px;box-shadow:0 6px 12px -8px rgba(0,0,0,.25)}
+}
+@media (min-width:900px){
+  .work{grid-template-columns:1fr 400px;grid-template-areas:"graph auftrag" "graph regler" "graph tabelle" "graph hilfen";align-items:start}
+  .work .graphbox{position:sticky;top:64px;height:calc(100vh - 80px)}
+}
+.graphbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;position:relative;overflow:hidden;height:min(56vh,480px);min-height:260px}
+.graphbox canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.legend{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;gap:4px;pointer-events:none;max-width:60%}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:1px 8px;font-size:.88rem;display:flex;align-items:center;gap:6px;opacity:.95}
+.sw{width:18px;height:4px;border-radius:2px;display:inline-block;flex:0 0 18px}
+.zoom{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:6px}
+.zoom button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-size:1.5rem;font-weight:700;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.zoom button.small{font-size:.8rem;font-weight:600}
+.ghint{position:absolute;bottom:6px;left:10px;right:60px;font-size:.78rem;color:var(--muted);pointer-events:none}
+
+.auftrag .q{font-size:1.18rem;font-weight:700;margin:2px 0 10px}
+.auftrag .nrbig{display:inline-flex;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;align-items:center;justify-content:center;font-weight:800;margin-right:6px;font-size:1rem;vertical-align:1px}
+.auftrag ul{margin:0;padding-left:1.2em}
+.auftrag li{margin:3px 0}
+.auftrag .note{margin-top:10px;padding:8px 10px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-weight:600;font-size:.95rem}
+.du-box{border-radius:12px;padding:12px;margin-bottom:10px;background:var(--accent-soft);border:1px solid var(--accent)}
+.du-box.me{background:var(--ok-soft);border-color:var(--ok)}
+.du-box h3{margin:0 0 6px;font-size:1.05rem}
+.du-box p{margin:0 0 8px}
+.du-box .sub{font-size:.85rem;color:var(--muted);margin-top:6px}
+.dots{display:flex;gap:6px;margin:4px 0 8px}
+.dots span{flex:1;height:8px;border-radius:4px;background:var(--line)}
+.dots span.done{background:var(--ok)}
+.dots span.cur{background:var(--accent)}
+
+.term{font-size:1.9rem;text-align:center;padding:2px 0 6px}
+.slider label{display:flex;justify-content:space-between;align-items:baseline;font-weight:600}
+.slider .val{font-size:1.15rem}
+input[type=range]{width:100%;height:40px;accent-color:var(--accent)}
+table.wt{border-collapse:collapse;width:100%;font-size:.98rem}
+table.wt td,table.wt th{border:1px solid var(--line);padding:5px 6px;text-align:right;font-variant-numeric:tabular-nums}
+table.wt th{background:var(--bg);font-weight:600;text-align:center}
+table.wt td.x{text-align:center;background:var(--bg);font-weight:600}
+table.wt td.sep{border:0;width:10px;background:transparent}
+table.wt td.g{color:var(--muted)}
+.wt-wrap{overflow-x:auto}
+.acc{border:1px solid var(--line);border-radius:10px;margin-top:8px;overflow:hidden}
+.acc>button{width:100%;text-align:left;background:var(--bg);border:0;padding:11px 12px;font-size:1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;min-height:44px}
+.acc>button:disabled{color:var(--lock);cursor:not-allowed}
+.acc.open>button{background:var(--accent-soft)}
+.acc .txt{padding:10px 12px;display:none}
+.acc.open .txt{display:block}
+.acc ul{margin:0;padding-left:1.1em}
+.acc li{margin:4px 0}
+.acc dl{margin:0}
+.acc dt{font-weight:700;margin-top:6px}
+.acc dd{margin:0 0 2px 0;color:var(--muted)}
+
+/* ---------- Lehrkraft / Smartboard ---------- */
+body.lk{font-size:20px;background:#f3f4f6}
+.lk header.top{padding:8px 16px;gap:8px}
+.lk header.top h1{font-size:1.05rem}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 14px;font-size:1rem;cursor:pointer;min-height:46px;font-weight:600}
+.tabs button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.tabs button.pause.on{background:var(--bad);border-color:var(--bad)}
+.timer{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:4px 8px}
+.timer .t{font-variant-numeric:tabular-nums;font-weight:800;font-size:1.3rem;min-width:3.2em;text-align:center}
+.timer.end .t{color:var(--bad);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+.timer button{border:0;background:none;font-size:1.2rem;cursor:pointer;padding:6px;min-width:40px;min-height:40px}
+.lk-main{padding:16px;display:grid;gap:16px}
+.cols{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:start}
+.reveal{display:inline-flex;align-items:center;justify-content:center;min-width:2.2em;min-height:1.4em;padding:0 .3em;border:2px dashed var(--accent);border-radius:8px;cursor:pointer;color:transparent;background:var(--accent-soft);vertical-align:middle;user-select:none}
+.reveal::before{content:"?";color:var(--accent);font-family:system-ui,sans-serif;font-weight:700;font-size:.7em}
+.reveal.shown{border:0;background:none;color:inherit;cursor:default;min-width:0;min-height:0;padding:0;display:inline}
+.reveal.shown::before{content:none}
+.ein-term{font-size:2.6rem;text-align:center;margin:10px 0}
+.ein-cond{font-size:1.6rem;text-align:center}
+.question{margin-top:20px;font-size:1.5rem;font-weight:700;text-align:center}
+.perm{font-size:2rem;width:100%;border-collapse:collapse}
+.perm td{padding:4px 8px}
+.perm td.l{text-align:right;white-space:nowrap}
+.perm td.eq{text-align:center;width:1em}
+.perm td.r{text-align:left;white-space:nowrap}
+.perm td.arr{font-size:1rem;color:var(--muted);text-align:left;white-space:nowrap;font-family:system-ui,sans-serif}
+.perm tr.gen td{padding-top:16px;font-size:2.4rem;font-weight:700}
+.qrbox{text-align:center}
+.qrbox svg,.qrbox img{width:min(320px,100%);height:auto;background:#fff;border-radius:12px}
+.qrbox.klein svg{width:min(200px,100%)}
+.qrbox.klein .code{font-size:1.6rem}
+.qrbox .url{font-size:1rem;color:var(--muted);word-break:break-all}
+.qrbox .code{font-size:2.2rem;font-weight:800;letter-spacing:.15em}
+.side-ein{font-size:1.4rem}
+.side-ein .gen{font-size:2rem;font-weight:700;margin-top:6px}
+.ablauf{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.ablauf span{padding:6px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-weight:600;font-size:1rem}
+.ablauf span.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.gcards{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.gcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px}
+.gcard h3{margin:0 0 8px;font-size:1.1rem;display:flex;justify-content:space-between;align-items:center}
+.slots{display:flex;gap:6px}
+.slot{flex:1;height:52px;border-radius:10px;border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;color:var(--lock);position:relative;background:none;cursor:default}
+.slot.full{border:2px solid var(--accent);background:var(--accent-soft);color:var(--text);cursor:pointer}
+.slot.full.off{border-color:var(--lock);background:var(--bg)}
+.slot .dot{position:absolute;top:4px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.slot.off .dot{background:var(--lock)}
+.slot.cur{outline:3px solid var(--ok);outline-offset:1px}
+.ductl{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.95rem}
+.ductl button{min-width:40px;min-height:40px;border-radius:8px;border:1px solid var(--line);background:var(--bg);cursor:pointer;font-weight:700}
+.bespr{display:grid;gap:16px;grid-template-columns:1fr 470px;align-items:stretch;height:calc(100vh - 100px)}
+.bespr .graphbox{height:100%}
+@media (max-width:1100px){.bespr{grid-template-columns:1fr;height:auto}.bespr .graphbox{height:60vh}}
+.bespr-side{display:flex;flex-direction:column;gap:10px;overflow-y:auto}
+.row{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;cursor:pointer}
+.row.sel{border:3px solid var(--accent);padding:8px 10px}
+.row .nr{flex:0 0 40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.row .mid{flex:1;min-width:0}
+.row .mid b{display:block;font-size:1.05rem}
+.row select{font:inherit;font-size:.95rem;padding:4px;border-radius:8px;border:1px solid var(--line);background:var(--bg);margin-top:4px}
+.dice{flex:0 0 auto;min-width:96px;min-height:64px;border-radius:12px;border:2px solid var(--accent);background:var(--panel);cursor:pointer;font-size:1.05rem;font-weight:800;line-height:1.1}
+.dice .dn{display:block;font-size:1.7rem}
+.dice.rolling{animation:shake .12s linear infinite}
+@keyframes shake{0%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}100%{transform:rotate(-6deg)}}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px 12px}
+.toolbar .term{font-size:1.6rem;padding:0}
+.toolbar input[type=range]{width:180px}
+.res-list{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.res-item{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:1.3rem;display:flex;justify-content:space-between;align-items:center}
+.res-item .math{font-size:2rem}
+.dialog{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+.dialog .card{max-width:520px;width:100%}
+.stepper{display:flex;align-items:center;gap:12px;font-size:1.2rem}
+.stepper button{min-width:48px;min-height:48px;font-size:1.4rem;border-radius:10px;border:1px solid var(--line);background:var(--bg);cursor:pointer}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="/socket.io/socket.io.js" onerror="window.__ohneServer=true"></script>
+<script src="/lib/qrcode.js" onerror="window.__ohneQR=true"></script>
+<script>
+(function () {
+'use strict';
+
+/* ================================================================== */
+/* Inhalte                                                             */
+/* ================================================================== */
+
+var SP = {
+  1: {
+    kurz: 'Nahe 0',
+    frage: 'Was passiert mit dem Graphen, wenn x ganz nah an 0 kommt? Was passiert bei x = 0?',
+    zusatz: 'Erkläre deine Beobachtung rechnerisch mit <span class="math">x<sup>−n</sup> = 1/x<sup>n</sup></span>.',
+    R: 1.5,
+    tab: { art: 'liste', xs: [-0.5, -0.1, -0.01, 0, 0.01, 0.1, 0.5] },
+    hilfen: [
+      'Schau in die Wertetabelle: Was passiert mit f(x), wenn x von 0,5 über 0,1 bis 0,01 immer näher an 0 kommt? Und links von 0, also bei −0,5, −0,1 und −0,01?',
+      'Rechne selbst: <span class="math">1/0,1² = 1/0,01 = ?</span> Und was wäre <span class="math">1/0²</span>? Kann man durch 0 teilen?'
+    ],
+    bausteine: ['Je näher x an 0 kommt, desto … wird …', 'Bei x = 0 …', 'Der Graph nähert sich der … an.']
+  },
+  2: {
+    kurz: 'Sehr große x',
+    frage: 'Was passiert mit dem Graphen, wenn x sehr groß wird – positiv und negativ?',
+    zusatz: 'Erkläre deine Beobachtung rechnerisch mit <span class="math">x<sup>−n</sup> = 1/x<sup>n</sup></span>.',
+    R: 12,
+    tab: { art: 'liste', xs: [-100, -10, -1, 1, 10, 100] },
+    hilfen: [
+      '„Sehr groß – positiv und negativ“ heißt: x = 10 und x = 100, aber auch x = −10 und x = −100. Schau in die Wertetabelle: Was passiert mit f(x)?',
+      'Rechne selbst: <span class="math">1/100² = ?</span> Wird f(x) irgendwann genau 0? Zoome nah an die x-Achse heran: Berührt der Graph sie?'
+    ],
+    bausteine: ['Je größer |x| wird, desto näher kommt f(x) der Zahl …', 'f(x) wird aber nie …', 'Der Graph nähert sich der … an.']
+  },
+  3: {
+    kurz: 'Die beiden Teile',
+    frage: 'Wie liegen die beiden Teile des Graphen zueinander?',
+    zusatz: 'Begründe deine Beobachtung mit der Wertetabelle.',
+    R: 3,
+    tab: { art: 'paare', xs: [0.5, 1, 2] },
+    hilfen: [
+      'Vergleiche in der Tabelle f(2) mit f(−2) und f(0,5) mit f(−0,5). Was fällt dir auf? Probiere gerade und ungerade n aus.',
+      'Erinnere dich an die Potenzfunktionen mit positiven Exponenten: Klappe den Graphen in Gedanken an der y-Achse um. Oder drehe ihn einmal halb um den Ursprung (0 | 0). Was passt bei welchem n?'
+    ],
+    bausteine: ['Der Graph ist achsensymmetrisch zur …', 'Der Graph ist punktsymmetrisch zum …', 'In der Tabelle sieht man: f(−2) = … und f(2) = …, also …']
+  },
+  4: {
+    kurz: 'Wo verläuft der Graph?',
+    frage: 'Wo im Koordinatensystem verläuft der Graph? Gibt es Punkte, durch die mehrere Graphen gehen?',
+    zusatz: 'Begründe deine Beobachtung mit der Wertetabelle.',
+    R: 3,
+    tab: { art: 'paare', xs: [0.5, 1, 2] },
+    hilfen: [
+      'Halte mehrere Graphen fest (n = 1, 2, 3, 4). Wo liegen sie: oberhalb oder unterhalb der x-Achse? Links oder rechts der y-Achse?',
+      'Schau in der Tabelle auf x = 1 und x = −1. Welche Funktionswerte haben die Graphen dort? Warum ist <span class="math">1/1<sup>n</sup></span> immer 1?'
+    ],
+    bausteine: ['Für gerades n sind alle Funktionswerte …', 'Für ungerades n sind die Funktionswerte links von 0 … und rechts von 0 …', 'Alle Graphen gehen durch den Punkt (… | …).']
+  },
+  5: {
+    kurz: 'Vergleich mit positiven Exponenten',
+    frage: 'Was ist anders als bei Potenzfunktionen mit positiven Exponenten? Was bleibt gleich?',
+    zusatz: null,
+    R: 3,
+    vergleich: true,
+    tab: { art: 'liste', xs: [-2, -1, -0.5, 0, 0.5, 1, 2] },
+    hilfen: [
+      'Der graue Graph zeigt zum Vergleich <span class="math">g(x) = x<sup>n</sup></span>. Stelle n = 2 ein und vergleiche die beiden Graphen. Dann n = 3.',
+      'Achte auf: Wie viele Teile hat der Graph? Gibt es den Punkt (0 | 0)? Ist der Graph symmetrisch? Welche Punkte gibt es bei x = 1 und x = −1?'
+    ],
+    bausteine: ['Gleich bleibt: …', 'Anders ist: …', 'Bei positiven Exponenten …, bei negativen Exponenten dagegen …']
+  }
+};
+var BAUSTEIN_N = 'Bei geradem n …, bei ungeradem n …';
+var WOERTER = [
+  ['Funktionswert f(x)', 'der y-Wert, der zu einem x-Wert gehört'],
+  ['Betrag |x|', 'Abstand einer Zahl von 0, ohne Vorzeichen: |−100| = 100 und |100| = 100'],
+  ['positiv / negativ', 'größer als 0 / kleiner als 0'],
+  ['gerade / ungerade Zahl', 'gerade: 2, 4, 6, … · ungerade: 1, 3, 5, …'],
+  ['Ursprung', 'der Punkt (0 | 0)'],
+  ['nicht definiert', 'Für diesen x-Wert gibt es keinen Funktionswert.'],
+  ['sich annähern an', 'immer näher an etwas herankommen'],
+  ['achsensymmetrisch zur y-Achse', 'Spiegelt man den Graphen an der y-Achse, passt er genau auf sich selbst.'],
+  ['punktsymmetrisch zum Ursprung', 'Dreht man den Graphen einmal halb um (0 | 0), passt er genau auf sich selbst.']
+];
+var N_MAX = 4;
+var PIN_COLORS = ['#16a34a', '#9333ea', '#db2777', '#ca8a04', '#0891b2'];
+var PHASEN = [
+  { id: 'einstieg', name: 'Einstieg', min: 8 },
+  { id: 'ich', name: 'Ich', min: 8 },
+  { id: 'du', name: 'Du', min: 9 },
+  { id: 'besprechung', name: 'Besprechung', min: 10 },
+  { id: 'reserve', name: 'Reserve', min: 7 }
+];
+
+/* ================================================================== */
+/* Hilfsfunktionen                                                     */
+/* ================================================================== */
+
+var $ = function (s, r) { return (r || document).querySelector(s); };
+var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+var speicher = {
+  get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+  del: function (k) { try { localStorage.removeItem(k); } catch (e) {} },
+  getJSON: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  setJSON: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+var toastT = null;
+function toast(msg, bad) {
+  var t = $('#toast');
+  if (!t) { t = document.createElement('div'); t.id = 'toast'; document.body.appendChild(t); }
+  t.className = 'toast' + (bad ? ' bad' : '');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(toastT);
+  toastT = setTimeout(function () { t.style.display = 'none'; }, bad ? 5000 : 3000);
+}
+var SUPZ = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻' };
+function hoch(k) { return String(k).split('').map(function (c) { return SUPZ[c] || c; }).join(''); }
+function de(v, maxDec) {
+  return v.toLocaleString('de-DE', { maximumFractionDigits: maxDec, useGrouping: Math.abs(v) >= 10000 }).replace('-', '−');
+}
+function fmtX(x) { return de(x, 4); }
+/** Wertetabelle: exakte Dezimaldarstellung (alle Tabellenwerte sind abbrechende Dezimalzahlen). */
+function fmtWert(v) {
+  if (!isFinite(v)) return '–';
+  if (v === 0) return '0';
+  var a = Math.abs(v);
+  if (a >= 1000) return de(Math.round(v), 0);
+  var d = a >= 1 ? 4 : Math.min(14, Math.ceil(-Math.log10(a)) + 4);
+  return de(+v.toFixed(d), d);
+}
+/** Abgelesener Punkt: gerundet, mit ≈ wenn gerundet wurde. */
+function fmtPunkt(v) {
+  if (!isFinite(v)) return '–';
+  var a = Math.abs(v), r;
+  if (a >= 0.01) r = Math.round(v * 1000) / 1000;
+  else r = Number(v.toPrecision(2));
+  var gleich = Math.abs(r - v) <= Math.abs(v) * 1e-12;
+  return (gleich ? '' : '≈ ') + de(r, 14);
+}
+function f(n, x) { return Math.pow(x, -n); }
+function g(n, x) { return Math.pow(x, n); }
+function termNeg(n, mitBruch) {
+  var t = 'f(x) = x<sup>−' + n + '</sup>';
+  if (mitBruch) t += ' = <span class="frac"><span>1</span><span>' + (n === 1 ? 'x' : 'x<sup>' + n + '</sup>') + '</span></span>';
+  return t;
+}
+function termNegText(n) { return 'f(x) = x' + hoch(-n); }
+function termPosText(n) { return 'g(x) = ' + (n === 1 ? 'x' : 'x' + hoch(n)); }
+function css(name) { return getComputedStyle(document.body).getPropertyValue(name).trim(); }
+
+/* ================================================================== */
+/* Graph                                                               */
+/* ================================================================== */
+
+function Plot(canvas, legend, opts) {
+  var P = this;
+  opts = opts || {};
+  P.cv = canvas; P.ctx = canvas.getContext('2d'); P.legend = legend;
+  P.n = 2; P.R = 3; P.zoom = 1; P.pins = []; P.probeX = null; P.vergleich = false;
+  P.font = opts.font || 13;
+  P.W = 0; P.H = 0; P.ppu = 40; P.cx = 0; P.cy = 0;
+  var touches = {}, pinch = null;
+  function anzahl() { return Object.keys(touches).length; }
+  function abstand() { var p = Object.keys(touches).map(function (k) { return touches[k]; }); return Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y); }
+  canvas.addEventListener('pointerdown', function (e) {
+    try { canvas.setPointerCapture(e.pointerId); } catch (er) {}
+    touches[e.pointerId] = { x: e.clientX, y: e.clientY };
+    if (anzahl() === 2) pinch = { d: abstand(), z: P.zoom };
+    else if (!pinch) P.probe(e);
+    var hint = canvas.parentElement.querySelector('.ghint');
+    if (hint) hint.style.display = 'none';
+  });
+  canvas.addEventListener('pointermove', function (e) {
+    if (touches[e.pointerId]) touches[e.pointerId] = { x: e.clientX, y: e.clientY };
+    if (pinch && anzahl() === 2) { P.setZoom(pinch.z * abstand() / pinch.d); return; }
+    if (!pinch && e.buttons) P.probe(e);
+  });
+  function hoch2(e) { delete touches[e.pointerId]; if (anzahl() === 0) pinch = null; }
+  canvas.addEventListener('pointerup', hoch2);
+  canvas.addEventListener('pointercancel', hoch2);
+  canvas.addEventListener('wheel', function (e) { e.preventDefault(); P.setZoom(P.zoom * (e.deltaY < 0 ? 1.15 : 1 / 1.15)); }, { passive: false });
+  if (window.ResizeObserver) new ResizeObserver(function () { P.layout(); P.draw(); }).observe(canvas.parentElement);
+  window.addEventListener('resize', function () { P.layout(); P.draw(); });
+}
+Plot.prototype.setPreset = function (R) { this.R = R; this.zoom = 1; this.probeX = null; this.layout(); this.draw(); };
+Plot.prototype.setZoom = function (z) {
+  var zmin = this.R / 400, zmax = this.R / 0.02;
+  this.zoom = Math.max(zmin, Math.min(zmax, z)); this.layout(); this.draw();
+};
+Plot.prototype.layout = function () {
+  var r = this.cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  this.W = r.width; this.H = r.height;
+  if (!this.W || !this.H) return;
+  this.cv.width = Math.round(this.W * dpr); this.cv.height = Math.round(this.H * dpr);
+  this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  this.ppu = Math.min(this.W, this.H) / 2 / this.R * this.zoom;
+  this.cx = this.W / 2; this.cy = this.H / 2;
+};
+Plot.prototype.X = function (x) { return this.cx + x * this.ppu; };
+Plot.prototype.Y = function (y) { return this.cy - y * this.ppu; };
+Plot.prototype.schritt = function () {
+  var ziel = 3.4 * this.font / this.ppu;
+  var st = [0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
+  for (var i = 0; i < st.length; i++) if (st[i] >= ziel) return st[i];
+  return 1000;
+};
+Plot.prototype.kurve = function (fn, farbe, breite, strich, getrennt) {
+  var c = this.ctx, W = this.W, H = this.H, P = this;
+  c.save(); c.strokeStyle = farbe; c.lineWidth = breite; c.setLineDash(strich || []); c.lineJoin = 'round';
+  function stueck(von, bis) {
+    c.beginPath();
+    var erster = true;
+    for (var px = von; px <= bis; px += 1) {
+      var x = (px - P.cx) / P.ppu;
+      if (getrennt && x === 0) continue;
+      var py = P.Y(fn(x));
+      if (!isFinite(py)) continue;
+      if (py < -10000) py = -10000; if (py > H + 10000) py = H + 10000;
+      if (erster) { c.moveTo(px, py); erster = false; } else c.lineTo(px, py);
+    }
+    c.stroke();
+  }
+  if (getrennt) {
+    var mitte = this.cx;
+    stueck(0, mitte - 0.25);
+    stueck(mitte + 0.25, W);
+    // Kurvenstücke direkt an der y-Achse ergänzen (Annäherung sichtbar bis zum Rand)
+    [-1, 1].forEach(function (s) {
+      var x = s * 0.25 / P.ppu, py = P.Y(fn(x));
+      if (!isFinite(py)) return;
+      py = Math.max(-10000, Math.min(H + 10000, py));
+      var x2 = s * 1.5 / P.ppu, py2 = Math.max(-10000, Math.min(H + 10000, P.Y(fn(x2))));
+      c.beginPath(); c.moveTo(P.X(x2), py2); c.lineTo(P.X(x), py); c.stroke();
+    });
+  } else stueck(0, W);
+  c.restore();
+};
+Plot.prototype.draw = function () {
+  var c = this.ctx, P = this, W = this.W, H = this.H;
+  if (!W || !H) return;
+  c.clearRect(0, 0, W, H);
+  var xr = W / 2 / this.ppu, yr = H / 2 / this.ppu, st = this.schritt(), i, j;
+  c.lineWidth = 1; c.strokeStyle = css('--grid'); c.beginPath();
+  for (i = Math.ceil(-xr / st); i <= Math.floor(xr / st); i++) { c.moveTo(this.X(i * st), 0); c.lineTo(this.X(i * st), H); }
+  for (j = Math.ceil(-yr / st); j <= Math.floor(yr / st); j++) { c.moveTo(0, this.Y(j * st)); c.lineTo(W, this.Y(j * st)); }
+  c.stroke();
+  var ax = css('--axis');
+  c.strokeStyle = ax; c.fillStyle = ax; c.lineWidth = 1.5;
+  c.beginPath(); c.moveTo(0, this.cy); c.lineTo(W, this.cy); c.moveTo(this.cx, 0); c.lineTo(this.cx, H); c.stroke();
+  c.beginPath(); c.moveTo(W, this.cy); c.lineTo(W - 10, this.cy - 5); c.lineTo(W - 10, this.cy + 5); c.fill();
+  c.beginPath(); c.moveTo(this.cx, 0); c.lineTo(this.cx - 5, 10); c.lineTo(this.cx + 5, 10); c.fill();
+  c.font = this.font + 'px system-ui, sans-serif';
+  c.textAlign = 'center'; c.textBaseline = 'top';
+  for (i = Math.ceil(-xr / st); i <= Math.floor(xr / st); i++) {
+    if (i === 0) continue;
+    c.beginPath(); c.moveTo(this.X(i * st), this.cy - 4); c.lineTo(this.X(i * st), this.cy + 4); c.stroke();
+    c.fillText(de(i * st, 3), this.X(i * st), this.cy + 6);
+  }
+  c.textAlign = 'right'; c.textBaseline = 'middle';
+  for (j = Math.ceil(-yr / st); j <= Math.floor(yr / st); j++) {
+    if (j === 0) continue;
+    c.beginPath(); c.moveTo(this.cx - 4, this.Y(j * st)); c.lineTo(this.cx + 4, this.Y(j * st)); c.stroke();
+    c.fillText(de(j * st, 3), this.cx - 7, this.Y(j * st));
+  }
+  c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+  c.font = 'italic ' + (this.font + 2) + 'px serif';
+  c.fillText('x', W - 16, this.cy - 10);
+  c.fillText('y', this.cx + 10, 16);
+
+  if (this.vergleich) { var nn = this.n; this.kurve(function (x) { return g(nn, x); }, css('--ref'), 2.5, [4, 6], false); }
+  this.pins.forEach(function (p) { P.kurve(function (x) { return f(p.n, x); }, p.color, 2.5, [8, 5], true); });
+  var n = this.n;
+  this.kurve(function (x) { return f(n, x); }, css('--accent'), 3.5, null, true);
+
+  if (this.probeX !== null) {
+    var px = this.probeX, label, sx = this.X(px), sy;
+    c.font = 'bold ' + (this.font + 3) + 'px system-ui, sans-serif';
+    if (px === 0) {
+      label = 'x = 0: kein Funktionswert';
+      sy = this.cy;
+      c.strokeStyle = css('--accent'); c.lineWidth = 2; c.setLineDash([3, 4]);
+      c.beginPath(); c.arc(sx, sy, 8, 0, 2 * Math.PI); c.stroke(); c.setLineDash([]);
+    } else {
+      var py = f(n, px); sy = this.Y(py);
+      label = '(' + fmtX(px) + ' | ' + fmtPunkt(py) + ')';
+      if (sy < -20 || sy > H + 20) {
+        c.fillStyle = css('--muted'); c.font = (this.font + 1) + 'px system-ui, sans-serif';
+        c.fillText('Punkt ' + label + ' liegt außerhalb des Bildes', 12, H - 30);
+        this.legende();
+        return;
+      }
+      c.fillStyle = css('--accent'); c.beginPath(); c.arc(sx, sy, 7, 0, 2 * Math.PI); c.fill();
+    }
+    var w = c.measureText(label).width + 14, h = this.font + 13;
+    var lx = Math.min(Math.max(sx + 12, 4), W - w - 4), ly = Math.min(Math.max(sy - h - 8, 4), H - h - 4);
+    c.fillStyle = css('--panel'); c.strokeStyle = css('--accent'); c.lineWidth = 1.5;
+    c.beginPath(); c.rect(lx, ly, w, h); c.fill(); c.stroke();
+    c.fillStyle = css('--text'); c.textBaseline = 'middle';
+    c.fillText(label, lx + 7, ly + h / 2);
+  }
+  this.legende();
+};
+Plot.prototype.legende = function () {
+  if (!this.legend) return;
+  var h = '<div class="chip"><span class="sw" style="background:' + css('--accent') + '"></span>' + termNegText(this.n) + '</div>';
+  h += this.pins.map(function (p) { return '<div class="chip"><span class="sw" style="background:' + p.color + '"></span>' + termNegText(p.n) + '</div>'; }).join('');
+  if (this.vergleich) h += '<div class="chip"><span class="sw" style="background:' + css('--ref') + '"></span>Vergleich: ' + termPosText(this.n) + '</div>';
+  this.legend.innerHTML = h;
+};
+Plot.prototype.probe = function (e) {
+  var r = this.cv.getBoundingClientRect();
+  var x = (e.clientX - r.left - this.cx) / this.ppu;
+  var q = this.ppu >= 2000 ? 1000 : this.ppu >= 200 ? 100 : this.ppu >= 20 ? 10 : 1;
+  this.probeX = Math.round(x * q) / q;
+  if (Object.is(this.probeX, -0)) this.probeX = 0;
+  this.draw();
+};
+Plot.prototype.festhalten = function () {
+  var n = this.n;
+  if (this.pins.some(function (p) { return p.n === n; })) return;
+  if (this.pins.length >= PIN_COLORS.length) this.pins.shift();
+  var used = this.pins.map(function (p) { return p.color; });
+  this.pins.push({ n: n, color: PIN_COLORS.filter(function (c) { return used.indexOf(c) < 0; })[0] });
+  this.draw();
+};
+Plot.prototype.loeschen = function () { this.pins = []; this.probeX = null; this.draw(); };
+
+function graphHTML(id) {
+  return '<div class="graphbox" id="' + id + '"><canvas></canvas><div class="legend"></div>' +
+    '<div class="zoom"><button type="button" data-z="in" aria-label="Hineinzoomen">+</button><button type="button" data-z="out" aria-label="Herauszoomen">−</button><button type="button" data-z="reset" class="small" aria-label="Startansicht">1:1</button></div>' +
+    '<div class="ghint">Tippe auf den Graphen, um einen Punkt abzulesen. Zoomen: + / − oder mit zwei Fingern.</div></div>';
+}
+function plotAnbinden(box, opts) {
+  var p = new Plot($('canvas', box), $('.legend', box), opts);
+  $$('.zoom button', box).forEach(function (b) {
+    b.addEventListener('click', function () {
+      var z = b.getAttribute('data-z');
+      if (z === 'in') p.setZoom(p.zoom * 1.5);
+      else if (z === 'out') p.setZoom(p.zoom / 1.5);
+      else { p.zoom = 1; p.probeX = null; p.layout(); p.draw(); }
+    });
+  });
+  return p;
+}
+
+function tabelleHTML(sp, n, vergleich) {
+  var t = SP[sp].tab, h;
+  if (t.art === 'paare') {
+    h = '<table class="wt"><tr><th>x</th><th>f(x)</th><td class="sep"></td><th>x</th><th>f(x)</th></tr>';
+    t.xs.forEach(function (x) {
+      h += '<tr><td class="x">' + fmtX(x) + '</td><td>' + fmtWert(f(n, x)) + '</td><td class="sep"></td><td class="x">' + fmtX(-x) + '</td><td>' + fmtWert(f(n, -x)) + '</td></tr>';
+    });
+    return h + '</table>';
+  }
+  h = '<table class="wt"><tr><th>x</th><th>' + termNegText(n) + '</th>' + (vergleich ? '<th>' + termPosText(n) + '</th>' : '') + '</tr>';
+  t.xs.forEach(function (x) {
+    h += '<tr><td class="x">' + fmtX(x) + '</td><td>' + (x === 0 ? '–' : fmtWert(f(n, x))) + '</td>' + (vergleich ? '<td class="g">' + fmtWert(g(n, x)) + '</td>' : '') + '</tr>';
+  });
+  return h + '</table>';
+}
+
+/* ================================================================== */
+/* Lernende                                                            */
+/* ================================================================== */
+
+function schuelerApp() {
+  var params = new URLSearchParams(location.search);
+  var code = (params.get('c') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 4);
+  var frei = params.has('frei') || window.__ohneServer || typeof window.io !== 'function';
+  var socket = null, ansicht = null, modus = 'start', gewaehlteGruppe = null, verbindeT = null, retryT = null;
+  var meineId = null, ende = false;
+  var app = $('#app');
+
+  app.innerHTML =
+    '<header class="top"><h1><span class="lang">Potenzfunktionen mit negativen Exponenten</span><span class="kurz math">f(x) = x<sup>−n</sup></span></h1><span class="badge hidden" id="badge"></span><button class="linkbtn hidden" id="aendern">ändern</button></header>' +
+    '<div id="screen"></div>' +
+    '<div class="work hidden" id="work">' +
+      '<section class="card auftrag" id="auftrag"></section>' +
+      graphHTML('gbox') +
+      '<section class="card regler"><div class="term math" id="term"></div>' +
+        '<div class="slider"><label for="sn"><span>n</span><span class="val math" id="vn"></span></label>' +
+        '<input type="range" id="sn" min="1" max="' + N_MAX + '" step="1" value="2"></div>' +
+        '<div class="btns"><button class="btn" id="pin">Graph festhalten</button><button class="btn" id="clear">Festgehaltene löschen</button><button class="btn hidden" id="vgl">Vergleich: x<sup>n</sup></button></div></section>' +
+      '<section class="card tabelle"><h2>Wertetabelle</h2><div class="wt-wrap" id="tab"></div></section>' +
+      '<section class="card hilfen" id="hilfen"></section>' +
+    '</div>';
+
+  var plot = plotAnbinden($('#gbox'));
+  var gezeigt = null;      // Schwerpunkt, dessen Ansicht gerade eingestellt ist
+  var hilfeStufe = 0;
+  var freiSp = 1;
+
+  function regler() {
+    $('#term').innerHTML = termNeg(plot.n, true);
+    $('#vn').textContent = 'n = ' + plot.n;
+    $('#sn').value = plot.n;
+    $('#vgl').classList.toggle('on', plot.vergleich);
+    $('#tab').innerHTML = tabelleHTML(gezeigt || 1, plot.n, plot.vergleich);
+  }
+  $('#sn').addEventListener('input', function () { plot.n = +this.value; plot.draw(); regler(); });
+  $('#pin').addEventListener('click', function () { plot.festhalten(); });
+  $('#clear').addEventListener('click', function () { plot.loeschen(); });
+  $('#vgl').addEventListener('click', function () { plot.vergleich = !plot.vergleich; plot.draw(); regler(); });
+
+  function ansichtEinstellen(sp) {
+    if (gezeigt === sp) return;
+    gezeigt = sp;
+    hilfeStufe = 0;
+    plot.pins = [];
+    plot.vergleich = !!SP[sp].vergleich;
+    $('#vgl').classList.toggle('hidden', !SP[sp].vergleich);
+    plot.setPreset(SP[sp].R);
+    regler();
+    hilfenZeichnen();
+  }
+
+  function hilfenZeichnen() {
+    var s = SP[gezeigt];
+    var h = '<h2>Hilfen</h2><p style="margin:0;font-size:.9rem;color:var(--muted)">Öffne eine Hilfe erst, wenn du nicht weiterkommst.</p>';
+    s.hilfen.forEach(function (t, i) {
+      var offen = i < hilfeStufe, frei2 = i <= hilfeStufe;
+      h += '<div class="acc' + (offen ? ' open' : '') + '"><button data-h="' + i + '"' + (frei2 ? '' : ' disabled') + '><span>Hilfe ' + (i + 1) + '</span><span>' + (offen ? '✓' : frei2 ? 'öffnen' : '🔒') + '</span></button><div class="txt">' + t + '</div></div>';
+    });
+    h += '<div class="acc" data-t="1"><button data-t="1"><span>Satzbausteine</span><span>▾</span></button><div class="txt"><ul>' +
+      s.bausteine.concat([BAUSTEIN_N]).map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul></div></div>';
+    h += '<div class="acc" data-t="1"><button data-t="1"><span>Wörter</span><span>▾</span></button><div class="txt"><dl>' +
+      WOERTER.map(function (w) { return '<dt>' + esc(w[0]) + '</dt><dd>' + esc(w[1]) + '</dd>'; }).join('') + '</dl></div></div>';
+    $('#hilfen').innerHTML = h;
+    $$('#hilfen button[data-h]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var i = +b.getAttribute('data-h');
+        if (i === hilfeStufe) { hilfeStufe++; hilfenZeichnen(); }
+      });
+    });
+    $$('#hilfen button[data-t]').forEach(function (b) {
+      b.addEventListener('click', function () { b.parentNode.classList.toggle('open'); });
+    });
+  }
+
+  function auftragHTML(sp, mitZusatz) {
+    var s = SP[sp];
+    var h = '<div class="q"><span class="nrbig">' + sp + '</span>' + esc(s.frage) + '</div>';
+    if (mitZusatz) {
+      h += '<ul><li>Verändere n. Hängt deine Beobachtung von n ab?</li>' +
+        (s.zusatz ? '<li>' + s.zusatz + '</li>' : '') +
+        '<li>Was fällt dir außerdem auf?</li></ul>' +
+        '<div class="note">✎ Notiere alles in deinem Feld auf dem Placemat.</div>';
+    }
+    return h;
+  }
+
+  var letzteSeite = null;
+  function nachOben(schluessel) {
+    // beim Wechsel von Phase oder Vorstellungsschritt an den Seitenanfang springen
+    if (schluessel !== letzteSeite) { letzteSeite = schluessel; window.scrollTo(0, 0); }
+  }
+  function kopfhoehe() {
+    var h = $('header.top'); if (h) document.documentElement.style.setProperty('--hh', h.offsetHeight + 'px');
+  }
+  window.addEventListener('resize', kopfhoehe);
+  function arbeitZeigen(an) {
+    $('#work').classList.toggle('hidden', !an);
+    $('#screen').classList.toggle('hidden', an);
+    kopfhoehe();
+    if (an) { plot.layout(); plot.draw(); }
+  }
+  function screen(html) { arbeitZeigen(false); $('#screen').innerHTML = html; }
+  function kopf() {
+    var b = $('#badge'), a = $('#aendern');
+    if (modus === 'frei') {
+      b.textContent = 'Frei erkunden'; b.classList.remove('hidden'); a.classList.add('hidden'); return;
+    }
+    if (ansicht && ansicht.ich) {
+      b.textContent = 'Gruppe ' + ansicht.ich.gruppe + ' · Nr. ' + ansicht.ich.sp;
+      b.classList.remove('hidden');
+      a.classList.toggle('hidden', !['einstieg', 'ich'].includes(ansicht.phase) || ansicht.pause);
+    } else { b.classList.add('hidden'); a.classList.add('hidden'); }
+  }
+  $('#aendern').addEventListener('click', function () {
+    if (!socket || !confirm('Gruppe oder Schwerpunkt ändern? Deine Nummer wird dann wieder frei.')) return;
+    socket.emit('s:abmelden', {}, function (r) {
+      if (r && !r.ok) return toast(r.fehler, true);
+      meineId = null; speichern(null); gewaehlteGruppe = null;
+    });
+  });
+
+  /* ----- freier Modus (ohne Server, z. B. zu Hause oder als Notlösung) ----- */
+  function freiStarten() {
+    modus = 'frei';
+    if (socket) { socket.disconnect(); socket = null; }
+    clearTimeout(verbindeT); clearTimeout(retryT);
+    kopf();
+    freiZeichnen();
+  }
+  function freiZeichnen() {
+    var h = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">';
+    for (var k = 1; k <= 5; k++) h += '<button class="btn' + (k === freiSp ? ' on' : '') + '" data-f="' + k + '">Nr. ' + k + '</button>';
+    h += '</div>' + auftragHTML(freiSp, true);
+    $('#auftrag').innerHTML = h;
+    $$('#auftrag [data-f]').forEach(function (b) { b.addEventListener('click', function () { freiSp = +b.getAttribute('data-f'); freiZeichnen(); }); });
+    ansichtEinstellen(freiSp);
+    $('#hilfen').classList.remove('hidden');
+    arbeitZeigen(true);
+  }
+
+  /* ----- Verbindung ----- */
+  function speicherKey() { return 'pfn_' + code; }
+  function speichern(wahl) {
+    if (!wahl) speicher.del(speicherKey());
+    else speicher.setJSON(speicherKey(), { id: meineId, gruppe: wahl.gruppe, sp: wahl.sp });
+  }
+  function beitreten() {
+    var gespeichert = speicher.getJSON(speicherKey(), null);
+    socket.emit('s:beitreten', { code: code, id: gespeichert && gespeichert.id, wahl: gespeichert }, function (r) {
+      clearTimeout(verbindeT);
+      if (!r || !r.ok) {
+        modus = 'unbekannt';
+        screen('<div class="big-msg"><div class="icon">⏳</div><h2>Warte auf die Lehrkraft</h2><p>Die Stunde mit dem Code <b>' + esc(code) + '</b> ist gerade nicht erreichbar. Die Seite versucht es automatisch weiter.</p><button class="btn" id="frei1">Ohne Anmeldung erkunden</button></div>');
+        $('#frei1').addEventListener('click', freiStarten);
+        clearTimeout(retryT);
+        retryT = setTimeout(function () { if (socket && modus === 'unbekannt') beitreten(); }, 5000);
+        return;
+      }
+      if (gespeichert && r.ansicht.ich) meineId = gespeichert.id;
+      else if (gespeichert && !r.ansicht.ich) { speichern(null); meineId = null; }
+      ansichtSetzen(r.ansicht);
+    });
+  }
+  function verbinden() {
+    modus = 'verbinde';
+    screen('<div class="big-msg"><div class="icon">📡</div><h2>Verbinde …</h2><p>Einen Moment bitte.</p><div id="langsam"></div></div>');
+    verbindeT = setTimeout(function () {
+      var l = $('#langsam');
+      if (l) l.innerHTML = '<p>Das dauert ungewöhnlich lange. Wenn es nicht klappt, kannst du ohne Anmeldung arbeiten und dir einen Schwerpunkt aussuchen.</p><button class="btn" id="frei2">Ohne Anmeldung erkunden</button>';
+      var b = $('#frei2'); if (b) b.addEventListener('click', freiStarten);
+    }, 10000);
+    socket = window.io({ transports: ['websocket', 'polling'] });
+    socket.on('connect', beitreten);
+    socket.on('s:ansicht', ansichtSetzen);
+    socket.on('s:beendet', function () {
+      ende = true; speichern(null);
+      screen('<div class="big-msg"><div class="icon">✅</div><h2>Die Stunde ist beendet</h2><p>Danke fürs Mitmachen! Du kannst das Tool weiter frei nutzen.</p><button class="btn primary" id="frei3">Frei weiter erkunden</button></div>');
+      $('#frei3').addEventListener('click', freiStarten);
+      kopf();
+      socket.disconnect();
+    });
+  }
+
+  /* ----- Anzeige je nach Phase ----- */
+  function ansichtSetzen(v) {
+    if (modus === 'frei' || ende) return;
+    ansicht = v;
+    if (!v.ich && meineId) { meineId = null; speichern(null); }
+    kopf();
+    if (!v.ich) { modus = 'wahl'; return wahlZeigen(); }
+    modus = 'dabei';
+    nachOben(v.phase + (v.pause ? 'p' : '') + (v.phase === 'du' ? v.du.schritt : ''));
+    if (v.pause) {
+      return screen('<div class="big-msg"><div class="icon">✋</div><h2>Bitte schaut nach vorn</h2><p>Gleich geht es weiter.</p></div>');
+    }
+    var ph = v.phase, ich = v.ich;
+    if (ph === 'einstieg') {
+      return screen('<div class="big-msg"><div class="icon">👍</div><h2>Du bist angemeldet</h2><p>Gruppe ' + ich.gruppe + ', Schwerpunkt Nr. ' + ich.sp + ':<br><b>' + esc(SP[ich.sp].frage) + '</b></p><p>Schau nach vorn. Es geht gleich los.</p></div>');
+    }
+    if (ph === 'besprechung') {
+      return screen('<div class="big-msg"><div class="icon">🗣️</div><h2>Besprechung</h2><p>Schaut zum Smartboard. Ergänzt oder verbessert eure Übersicht in eigenen Worten.</p></div>');
+    }
+    if (ph === 'reserve') {
+      var r = v.reserve;
+      return screen('<div class="big-msg"><div class="icon">✏️</div><h2>Eure Funktion</h2><p class="math" style="font-size:2.4rem">' + (r ? 'f(x) = x<sup>−' + r + '</sup>' : '–') + '</p><p>Skizziert den Graphen <b>ohne Tool</b> in der Mitte eures Placemats. Beschriftet ihn mit den Eigenschaften aus eurer Übersicht.</p></div>');
+    }
+    if (ph === 'du') return duZeigen(v);
+    // Ich-Phase
+    $('#auftrag').innerHTML = auftragHTML(ich.sp, true);
+    ansichtEinstellen(ich.sp);
+    $('#hilfen').classList.remove('hidden');
+    arbeitZeigen(true);
+  }
+
+  function duZeigen(v) {
+    var ich = v.ich, k = v.du.schritt, h = '<div class="dots">';
+    for (var i = 1; i <= 5; i++) h += '<span class="' + (i < k ? 'done' : i === k ? 'cur' : '') + '"></span>';
+    h += '</div>';
+    if (k > 5) {
+      h = '<div class="du-box me"><h3>Alle Zeilen sind vorgestellt</h3>' + h +
+        '<p>Prüft gemeinsam: Steht in jeder Zeile eurer Übersicht etwas? Einigt euch auf Formulierungen, die jede und jeder von euch vorstellen kann.</p></div>';
+      $('#auftrag').innerHTML = h + auftragHTML(ich.sp, false);
+      ansichtEinstellen(ich.sp);
+    } else {
+      var weiter = k < 5 ? 'weiter zu Nr. ' + (k + 1) : 'Runde beenden';
+      if (ich.sp === k) {
+        h = '<div class="du-box me"><h3>Du bist dran: Nr. ' + k + '</h3>' + h +
+          '<p>Zeige deinen Graphen und erkläre deiner Gruppe, was du herausgefunden hast. Die anderen tragen es in Zeile ' + k + ' ihrer Übersicht ein.</p>' +
+          '<button class="btn ok" id="weiter">Fertig erklärt – ' + weiter + '</button></div>';
+      } else if (v.du.experte) {
+        h = '<div class="du-box"><h3>Nr. ' + k + ' erklärt</h3>' + h +
+          '<p>Hör zu und trage Zeile ' + k + ' in deine Übersicht ein. Prüfe die Beobachtung auf deinem Gerät. Frag nach, wenn du etwas nicht verstehst.</p>' +
+          '<button class="btn" id="weiter">' + (k < 5 ? 'Weiter zu Nr. ' + (k + 1) : 'Runde beenden') + '</button><div class="sub">Erst tippen, wenn Nr. ' + k + ' fertig ist.</div></div>';
+      } else {
+        h = '<div class="du-box"><h3>Nr. ' + k + ': gemeinsam untersuchen</h3>' + h +
+          '<p>Diesen Schwerpunkt hat in eurer Gruppe niemand untersucht. Untersucht ihn jetzt gemeinsam auf euren Geräten und tragt Zeile ' + k + ' in eure Übersicht ein.</p>' +
+          '<button class="btn" id="weiter">Fertig – ' + weiter + '</button></div>';
+      }
+      $('#auftrag').innerHTML = h + auftragHTML(k, false);
+      ansichtEinstellen(k);
+      $('#weiter').addEventListener('click', function () {
+        this.disabled = true;
+        socket.emit('s:weiter', { von: k }, function () {});
+      });
+    }
+    $('#hilfen').classList.add('hidden');
+    arbeitZeigen(true);
+  }
+
+  function wahlZeigen() {
+    var v = ansicht;
+    if (!['einstieg', 'ich'].includes(v.phase)) {
+      screen('<div class="big-msg"><div class="icon">🔒</div><h2>Die Anmeldung ist geschlossen</h2><p>Melde dich bei deiner Lehrkraft. Bis dahin kannst du ohne Anmeldung mitarbeiten.</p><button class="btn" id="frei5">Ohne Anmeldung erkunden</button></div>');
+      $('#frei5').addEventListener('click', freiStarten);
+      return;
+    }
+    if (!gewaehlteGruppe || gewaehlteGruppe > v.gruppen) {
+      var h = '<div class="screen"><h2>1. Wähle deine Gruppe</h2><div class="grid-g">';
+      for (var gi = 1; gi <= v.gruppen; gi++) {
+        var anz = (v.vergeben[gi] || []).length;
+        h += '<button data-g="' + gi + '">Gruppe ' + gi + '<small>' + anz + ' angemeldet</small></button>';
+      }
+      h += '</div></div>';
+      screen(h);
+      $$('[data-g]').forEach(function (b) { b.addEventListener('click', function () { gewaehlteGruppe = +b.getAttribute('data-g'); wahlZeigen(); }); });
+      return;
+    }
+    var belegt = v.vergeben[gewaehlteGruppe] || [];
+    var erst4 = [1, 2, 3, 4].every(function (k) { return belegt.indexOf(k) >= 0; });
+    var h2 = '<div class="screen"><p><button class="linkbtn" id="zurueck">← andere Gruppe</button></p>' +
+      '<h2>2. Gruppe ' + gewaehlteGruppe + ': Wähle eine Nummer</h2><p>Jede Nummer gibt es in eurer Gruppe nur einmal. Sprecht euch ab.</p><div class="sp-list">';
+    for (var k = 1; k <= 5; k++) {
+      var weg = belegt.indexOf(k) >= 0, gesperrt = k === 5 && !erst4 && !weg;
+      h2 += '<button class="sp-btn" data-sp="' + k + '"' + (weg || gesperrt ? ' disabled' : '') + '><span class="nr">' + k + '</span><span><b>' + esc(SP[k].kurz) + '</b><span class="q">' + esc(SP[k].frage) + '</span>' +
+        (weg ? '<span class="tag">schon vergeben</span>' : gesperrt ? '<span class="tag">nur in Fünfergruppen – erst wenn 1 bis 4 vergeben sind</span>' : '') + '</span></button>';
+    }
+    h2 += '</div></div>';
+    screen(h2);
+    $('#zurueck').addEventListener('click', function () { gewaehlteGruppe = null; wahlZeigen(); });
+    $$('[data-sp]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var sp = +b.getAttribute('data-sp');
+        $$('[data-sp]').forEach(function (x) { x.disabled = true; });
+        socket.emit('s:waehlen', { gruppe: gewaehlteGruppe, sp: sp }, function (r) {
+          if (!r || !r.ok) { toast((r && r.fehler) || 'Das hat nicht geklappt.', true); wahlZeigen(); return; }
+          meineId = r.id;
+          speichern({ gruppe: gewaehlteGruppe, sp: sp });
+        });
+      });
+    });
+  }
+
+  /* ----- Start ----- */
+  if (frei) return freiStarten();
+  if (!code) {
+    screen('<div class="screen"><h2>Code eingeben</h2><p>Scanne den QR-Code am Smartboard oder gib den Code ein.</p>' +
+      '<input class="input" id="codein" maxlength="4" autocapitalize="characters" autocomplete="off" placeholder="z. B. K7QF" style="text-transform:uppercase;letter-spacing:.2em">' +
+      '<div class="btns"><button class="btn primary" id="go">Weiter</button><button class="btn" id="frei4">Ohne Anmeldung erkunden</button></div></div>');
+    $('#go').addEventListener('click', function () {
+      var c = $('#codein').value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (c.length !== 4) return toast('Der Code hat 4 Zeichen.', true);
+      location.search = '?c=' + c;
+    });
+    $('#codein').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('#go').click(); });
+    $('#frei4').addEventListener('click', freiStarten);
+    return;
+  }
+  verbinden();
+}
+
+/* ================================================================== */
+/* Lehrkraft / Smartboard                                              */
+/* ================================================================== */
+
+function lehrkraftApp() {
+  document.body.classList.add('lk');
+  var app = $('#app');
+  if (window.__ohneServer || typeof window.io !== 'function') {
+    app.innerHTML = '<div class="big-msg"><h2>Kein Server</h2><p>Die Lehrkraft-Ansicht funktioniert nur, wenn das Tool über den Server (Render) geöffnet wird.</p></div>';
+    return;
+  }
+  var socket = window.io({ transports: ['websocket', 'polling'] });
+  var cfg = { passwortNoetig: false };
+  var sitzung = speicher.getJSON('pfn_lk', null);   // { code, token }
+  var z = null;                                       // Zustand vom Server
+  var gebaut = null;                                  // Phase, für die der Inhalt gebaut wurde
+  var plot = null, zeile = 1, alteWuerfe = {};
+  var einstieg = speicher.getJSON('pfn_lk_ein', {});
+  var timer = { rest: 0, laeuft: false, t: null, phase: null };
+
+  fetch('/config.json').then(function (r) { return r.json(); }).then(function (c) { cfg = c; if (!z) start(); }).catch(function () {});
+
+  function aktion(d, cb) {
+    d.code = sitzung.code; d.token = sitzung.token;
+    socket.emit('lk:aktion', d, function (r) {
+      if (r && !r.ok && r.fehler) toast(r.fehler, true);
+      if (cb) cb(r);
+    });
+  }
+  function sichern() {
+    if (!z || !sitzung) return;
+    speicher.setJSON('pfn_lk_snap', {
+      code: sitzung.code, token: sitzung.token, gruppen: z.gruppen, phase: z.phase,
+      lernende: z.lernende.map(function (l) { return { id: l.id, gruppe: l.gruppe, sp: l.sp }; }),
+      duSchritt: z.duSchritt, zeilen: z.zeilen, gewuerfelt: z.gewuerfelt, ohneExperte: z.ohneExperte, reserve: z.reserve
+    });
+  }
+  function zustandSetzen(neu) { z = neu; sichern(); zeichnen(); }
+
+  socket.on('connect', function () { if (sitzung) beitreten(); else start(); });
+  socket.on('lk:zustand', zustandSetzen);
+  socket.on('lk:beendet', function () { speicher.del('pfn_lk'); speicher.del('pfn_lk_snap'); speicher.del('pfn_lk_ein'); sitzung = null; z = null; einstieg = {}; start(); });
+
+  function beitreten() {
+    socket.emit('lk:beitreten', sitzung, function (r) {
+      if (r && r.ok) return zustandSetzen(r.zustand);
+      var snap = speicher.getJSON('pfn_lk_snap', null);
+      if (r && r.grund === 'unbekannt' && snap && snap.code === sitzung.code) {
+        socket.emit('lk:wiederherstellen', { passwort: speicher.get('pfn_pw') || '', snapshot: snap }, function (r2) {
+          if (r2 && r2.ok) { toast('Die Stunde wurde nach einem Server-Neustart wiederhergestellt.'); return zustandSetzen(r2.zustand); }
+          if (r2 && r2.fehler === 'passwort') return pwAbfrage(snap);
+          sitzung = null; speicher.del('pfn_lk'); start();
+        });
+        return;
+      }
+      sitzung = null; speicher.del('pfn_lk'); start();
+    });
+  }
+  function pwAbfrage(snap) {
+    app.innerHTML = '<div class="screen"><div class="card"><h2>Stunde wiederherstellen</h2><p>Der Server wurde neu gestartet. Gib dein Passwort ein, um die Stunde (Code ' + esc(snap.code) + ') wiederherzustellen. Die Geräte der Lernenden verbinden sich danach automatisch neu.</p>' +
+      '<input class="input" type="password" id="pw2" placeholder="Passwort"><div class="btns"><button class="btn primary" id="wh">Wiederherstellen</button><button class="btn" id="neu2">Neue Stunde</button></div></div></div>';
+    $('#wh').addEventListener('click', function () { speicher.set('pfn_pw', $('#pw2').value); beitreten(); });
+    $('#neu2').addEventListener('click', function () { sitzung = null; speicher.del('pfn_lk'); speicher.del('pfn_lk_snap'); start(); });
+  }
+
+  function start() {
+    if (sitzung) return;
+    gebaut = null; plot = null;
+    app.innerHTML = '<div class="screen" style="max-width:560px"><div class="card"><h2>Neue Stunde anlegen</h2>' +
+      '<p>Potenzfunktionen mit negativen Exponenten – Placemat</p>' +
+      '<div class="stepper" style="margin:12px 0"><span>Anzahl der Gruppen:</span><button id="gm">−</button><b id="gz">5</b><button id="gp">+</button></div>' +
+      (cfg.passwortNoetig ? '<label>Passwort<input class="input" type="password" id="pw" value="' + esc(speicher.get('pfn_pw') || '') + '"></label>' : '') +
+      '<div class="btns"><button class="btn primary" id="anlegen">Stunde anlegen</button></div>' +
+      '<p style="font-size:.9rem;color:var(--muted);margin-top:14px">Tipp: Öffne diese Seite ein paar Minuten vor der Stunde. Der kostenlose Server bei Render braucht nach einer Pause bis zu einer Minute zum Aufwachen.</p></div></div>';
+    var gz = 5;
+    $('#gm').addEventListener('click', function () { gz = Math.max(1, gz - 1); $('#gz').textContent = gz; });
+    $('#gp').addEventListener('click', function () { gz = Math.min(8, gz + 1); $('#gz').textContent = gz; });
+    $('#anlegen').addEventListener('click', function () {
+      var pw = cfg.passwortNoetig ? $('#pw').value : '';
+      socket.emit('lk:anlegen', { gruppen: gz, passwort: pw }, function (r) {
+        if (!r || !r.ok) return toast((r && r.fehler) || 'Das hat nicht geklappt.', true);
+        if (cfg.passwortNoetig) speicher.set('pfn_pw', pw);
+        sitzung = { code: r.code, token: r.token };
+        speicher.setJSON('pfn_lk', sitzung);
+        einstieg = {}; speicher.setJSON('pfn_lk_ein', einstieg);
+        zustandSetzen(r.zustand);
+      });
+    });
+  }
+
+  /* ----- Timer ----- */
+  function timerSetzen(phase) {
+    var p = PHASEN.filter(function (x) { return x.id === phase; })[0];
+    clearInterval(timer.t); timer.laeuft = false; timer.rest = (p ? p.min : 5) * 60; timer.phase = phase;
+    timerZeigen();
+  }
+  function timerZeigen() {
+    var el = $('#timer'); if (!el) return;
+    var m = Math.floor(Math.max(0, timer.rest) / 60), s = Math.max(0, timer.rest) % 60;
+    $('.t', el).textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    $('[data-tm="go"]', el).textContent = timer.laeuft ? '⏸' : '▶';
+    el.classList.toggle('end', timer.rest <= 0);
+  }
+  function timerToggle() {
+    if (timer.laeuft) { clearInterval(timer.t); timer.laeuft = false; }
+    else {
+      if (timer.rest <= 0) return;
+      timer.laeuft = true;
+      timer.t = setInterval(function () { timer.rest--; if (timer.rest <= 0) { clearInterval(timer.t); timer.laeuft = false; } timerZeigen(); }, 1000);
+    }
+    timerZeigen();
+  }
+
+  /* ----- Grundgerüst ----- */
+  function geruest() {
+    var tabs = PHASEN.map(function (p) { return '<button data-ph="' + p.id + '">' + p.name + '</button>'; }).join('');
+    app.innerHTML = '<header class="top"><h1>Potenzfunktionen x<sup>−n</sup></h1>' +
+      '<div class="tabs">' + tabs + '<button class="pause" data-pause="1">✋ Geräte sperren</button></div>' +
+      '<div class="timer" id="timer"><span class="t">0:00</span><button data-tm="go" aria-label="Start/Pause">▶</button><button data-tm="re" aria-label="Zurücksetzen">↺</button></div>' +
+      '<span class="badge" id="codebadge"></span><button class="btn" id="menu" aria-label="Einstellungen">⚙</button></header>' +
+      '<div class="lk-main" id="inhalt"></div>';
+    $$('[data-ph]').forEach(function (b) { b.addEventListener('click', function () { aktion({ typ: 'phase', phase: b.getAttribute('data-ph') }); }); });
+    $('[data-pause]').addEventListener('click', function () { aktion({ typ: 'pause', an: !z.pause }); });
+    $('[data-tm="go"]').addEventListener('click', timerToggle);
+    $('[data-tm="re"]').addEventListener('click', function () { timerSetzen(z.phase); });
+    $('#menu').addEventListener('click', menue);
+  }
+
+  function menue() {
+    var d = document.createElement('div');
+    d.className = 'dialog';
+    d.innerHTML = '<div class="card"><h2>Einstellungen</h2>' +
+      '<div class="stepper" style="margin:10px 0"><span>Gruppen:</span><button data-m="gm">−</button><b>' + z.gruppen + '</b><button data-m="gp">+</button></div>' +
+      '<div class="btns" style="flex-direction:column;align-items:stretch">' +
+      '<button class="btn" data-m="voll">Vollbild an/aus</button>' +
+      '<button class="btn" data-m="dureset">Vorstellungsrunde aller Gruppen auf Nr. 1 zurücksetzen</button>' +
+      '<button class="btn" data-m="einreset">Einstieg wieder verdecken</button>' +
+      '<button class="btn" data-m="ende" style="color:var(--bad)">Stunde beenden (Daten löschen)</button>' +
+      '<button class="btn primary" data-m="zu">Schließen</button></div></div>';
+    document.body.appendChild(d);
+    d.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-m]');
+      if (e.target === d) return d.remove();
+      if (!b) return;
+      var m = b.getAttribute('data-m');
+      if (m === 'gm' || m === 'gp') { aktion({ typ: 'gruppenzahl', n: z.gruppen + (m === 'gp' ? 1 : -1) }); d.remove(); }
+      if (m === 'voll') { if (document.fullscreenElement) document.exitFullscreen(); else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); d.remove(); }
+      if (m === 'dureset') { aktion({ typ: 'duAlleNeu' }); d.remove(); }
+      if (m === 'einreset') { einstieg = {}; speicher.setJSON('pfn_lk_ein', einstieg); gebaut = null; zeichnen(); d.remove(); }
+      if (m === 'ende') { if (confirm('Stunde beenden? Alle Anmeldungen werden gelöscht.')) aktion({ typ: 'beenden' }); d.remove(); }
+      if (m === 'zu') d.remove();
+    });
+  }
+
+  function zeichnen() {
+    if (!z) return;
+    if (!$('#inhalt')) { geruest(); gebaut = null; }
+    $$('[data-ph]').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-ph') === z.phase); });
+    $('[data-pause]').classList.toggle('on', !!z.pause);
+    $('[data-pause]').textContent = z.pause ? '✋ Geräte gesperrt' : '✋ Geräte sperren';
+    $('#codebadge').textContent = 'Code ' + z.code;
+    if (timer.phase !== z.phase) timerSetzen(z.phase);
+    if (gebaut !== z.phase) { bauen(z.phase); gebaut = z.phase; }
+    aktualisieren();
+  }
+
+  var URL_S = function () { return location.origin + '/?c=' + z.code; };
+  function qrHTML(gross) {
+    var url = URL_S(), svg = '';
+    if (!window.__ohneQR && typeof window.qrcode === 'function') {
+      var q = window.qrcode(0, 'M'); q.addData(url); q.make();
+      svg = q.createSvgTag({ cellSize: gross ? 8 : 5, margin: 2, scalable: true });
+    }
+    return '<div class="qrbox' + (gross ? '' : ' klein') + '">' + svg + '<div class="code">' + esc(z.code) + '</div><div class="url">' + esc(url) + '</div></div>';
+  }
+  function rev(key, inhalt) {
+    return '<span class="reveal' + (einstieg[key] ? ' shown' : '') + '" data-rv="' + key + '">' + inhalt + '</span>';
+  }
+  function permHTML(alles) {
+    var zeilen = [
+      ['2<sup>3</sup>', '8'], ['2<sup>2</sup>', '4'], ['2<sup>1</sup>', '2'],
+      ['2<sup>0</sup>', rv('p0', '1')],
+      ['2<sup>−1</sup>', rv('p1', '<span class="frac"><span>1</span><span>2</span></span> = <span class="frac"><span>1</span><span>2<sup>1</sup></span></span>')],
+      ['2<sup>−2</sup>', rv('p2', '<span class="frac"><span>1</span><span>4</span></span> = <span class="frac"><span>1</span><span>2<sup>2</sup></span></span>')],
+      ['2<sup>−3</sup>', rv('p3', '<span class="frac"><span>1</span><span>8</span></span> = <span class="frac"><span>1</span><span>2<sup>3</sup></span></span>')]
+    ];
+    function rv(k, t) { return alles ? t : rev(k, t); }
+    var h = '<table class="perm math">';
+    zeilen.forEach(function (r, i) {
+      h += '<tr><td class="l">' + r[0] + '</td><td class="eq">=</td><td class="r">' + r[1] + '</td><td class="arr">' + (i < zeilen.length - 1 ? '↓ : 2' : '') + '</td></tr>';
+    });
+    h += '<tr class="gen"><td class="l">x<sup>−n</sup></td><td class="eq">=</td><td class="r" colspan="2">' + rv('gen', '<span class="frac"><span>1</span><span>x<sup>n</sup></span></span>') + '</td></tr></table>';
+    return h;
+  }
+
+  function bauen(phase) {
+    var el = $('#inhalt');
+    plot = null;
+    if (phase === 'einstieg') {
+      el.innerHTML = '<div class="cols">' +
+        '<div class="card"><div class="ein-term math">f(x) = ' + rev('a', 'a') + ' · x<sup>' + rev('n', 'n') + '</sup></div>' +
+        '<div class="ein-cond math">mit ' + rev('a0', 'a ≠ 0') + ' und ' + rev('nN', 'n ∈ ℕ = {1; 2; 3; …}') + '</div>' +
+        '<div class="question">' + rev('frage', 'Was passiert, wenn der Exponent negativ wird?') + '</div></div>' +
+        '<div class="card">' + permHTML(false) + '</div>' +
+        '<div class="card"><h2>Auftrag</h2><p style="font-size:1.25rem">Untersuche, wie die Graphen von <span class="math">f(x) = x<sup>−n</sup></span> aussehen.</p>' +
+        '<div id="qrslot">' + (einstieg.qr ? qrHTML(true) : '<button class="btn primary" id="qrzeigen">QR-Code zeigen</button>') + '</div></div></div>';
+      $$('[data-rv]', el).forEach(function (s) {
+        s.addEventListener('click', function () { einstieg[s.getAttribute('data-rv')] = 1; speicher.setJSON('pfn_lk_ein', einstieg); s.classList.add('shown'); });
+      });
+      var qb = $('#qrzeigen');
+      if (qb) qb.addEventListener('click', function () { einstieg.qr = 1; speicher.setJSON('pfn_lk_ein', einstieg); $('#qrslot').innerHTML = qrHTML(true); });
+      return;
+    }
+    if (phase === 'ich' || phase === 'du') {
+      el.innerHTML = '<div class="cols" style="grid-template-columns:minmax(300px,420px) 1fr">' +
+        '<div style="display:grid;gap:16px"><div class="card side-ein"><h2>Aus dem Einstieg</h2>' + permHTML(true) + '</div>' +
+        '<div class="card">' + qrHTML(false) + '</div></div>' +
+        '<div style="display:grid;gap:16px"><div class="card" id="auftragLK"></div><div class="gcards" id="gcards"></div></div></div>';
+      $('.side-ein .perm').style.fontSize = '1.25rem';
+      return;
+    }
+    if (phase === 'besprechung') {
+      el.innerHTML = '<div class="bespr"><div style="display:flex;flex-direction:column;gap:10px;min-height:0">' +
+        '<div class="toolbar"><span class="term math" id="bterm"></span><label style="display:flex;align-items:center;gap:8px;font-weight:600">n <input type="range" id="bn" min="1" max="' + N_MAX + '" step="1" value="2"><span id="bnv" class="math"></span></label>' +
+        '<button class="btn" id="bpin">Graph festhalten</button><button class="btn" id="bclear">Löschen</button><button class="btn" id="bvgl">Vergleich: x<sup>n</sup></button></div>' +
+        graphHTML('bgbox').replace('class="graphbox"', 'class="graphbox" style="flex:1"') + '</div>' +
+        '<div class="bespr-side" id="rows"></div></div>';
+      plot = plotAnbinden($('#bgbox'), { font: 16 });
+      var bt = function () { $('#bterm').innerHTML = termNeg(plot.n, true); $('#bnv').textContent = 'n = ' + plot.n; $('#bvgl').classList.toggle('on', plot.vergleich); };
+      $('#bn').addEventListener('input', function () { plot.n = +this.value; plot.draw(); bt(); });
+      $('#bpin').addEventListener('click', function () { plot.festhalten(); });
+      $('#bclear').addEventListener('click', function () { plot.loeschen(); });
+      $('#bvgl').addEventListener('click', function () { plot.vergleich = !plot.vergleich; plot.draw(); bt(); });
+      plot.vergleich = !!SP[zeile].vergleich;
+      plot.setPreset(SP[zeile].R);
+      bt();
+      plot._bt = bt;
+      return;
+    }
+    if (phase === 'reserve') {
+      el.innerHTML = '<div class="card" style="font-size:1.4rem"><b>Skizziert den Graphen eurer Funktion ohne Tool in der Mitte eures Placemats.</b><br>Beschriftet ihn mit den Eigenschaften aus eurer Übersicht.</div>' +
+        '<div class="res-list" id="reslist"></div>' +
+        '<div class="btns"><button class="btn" id="resneu">Funktionen neu verteilen</button><button class="btn" id="ausblick">Ausblick zeigen</button></div>' +
+        '<div class="card hidden" id="ausblicktext" style="font-size:1.6rem;text-align:center">Nächste Stunde: Was bewirkt der Faktor a in <span class="math">f(x) = a · x<sup>−n</sup></span>?</div>';
+      $('#resneu').addEventListener('click', function () { aktion({ typ: 'reserveVerteilen' }); });
+      $('#ausblick').addEventListener('click', function () { $('#ausblicktext').classList.remove('hidden'); });
+    }
+  }
+
+  function gruppenKarten() {
+    var h = '';
+    for (var gi = 1; gi <= z.gruppen; gi++) {
+      var mit = z.lernende.filter(function (l) { return l.gruppe === gi; });
+      var schritt = z.duSchritt[gi] || 1;
+      h += '<div class="gcard"><h3><span>Gruppe ' + gi + '</span><span style="font-size:.9rem;color:var(--muted)">' + mit.length + ' Geräte</span></h3><div class="slots">';
+      for (var k = 1; k <= 5; k++) {
+        var l = mit.filter(function (x) { return x.sp === k; })[0];
+        var cur = z.phase === 'du' && schritt === k;
+        h += l ? '<button class="slot full' + (l.online ? '' : ' off') + (cur ? ' cur' : '') + '" data-weg="' + l.id + '" data-info="' + gi + '/' + k + '" title="Nr. ' + k + (l.online ? '' : ' (gerade nicht verbunden)') + '">' + k + '<span class="dot"></span></button>'
+          : '<span class="slot' + (cur ? ' cur' : '') + '">' + k + '</span>';
+      }
+      h += '</div>';
+      if (z.phase === 'du') {
+        h += '<div class="ductl"><button data-du="' + gi + '" data-d="-1">−</button><span style="flex:1;text-align:center">' + (schritt > 5 ? '✓ fertig' : 'Nr. ' + schritt + ' stellt vor') + '</span><button data-du="' + gi + '" data-d="1">+</button></div>';
+      }
+      h += '</div>';
+    }
+    $('#gcards').innerHTML = h;
+    $$('#gcards [data-weg]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var info = b.getAttribute('data-info').split('/');
+        if (confirm('Gerät mit Nr. ' + info[1] + ' aus Gruppe ' + info[0] + ' entfernen? Die Nummer wird wieder frei.')) aktion({ typ: 'entfernen', id: b.getAttribute('data-weg') });
+      });
+    });
+    $$('#gcards [data-du]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var gi = +b.getAttribute('data-du');
+        var s = (z.duSchritt[gi] || 1) + (+b.getAttribute('data-d'));
+        aktion({ typ: 'duSetzen', gruppe: gi, schritt: Math.max(1, Math.min(6, s)) });
+      });
+    });
+  }
+
+  function zeilenListe() {
+    var h = '<label style="display:flex;gap:8px;align-items:center;font-size:.95rem"><input type="checkbox" id="ohneEx"' + (z.ohneExperte ? ' checked' : '') + ' style="width:22px;height:22px"> Würfeln ohne die Person, die den Schwerpunkt selbst untersucht hat</label>';
+    for (var k = 1; k <= 5; k++) {
+      var gr = z.zeilen[k], w = z.gewuerfelt[k];
+      var opts = '';
+      for (var gi = 1; gi <= z.gruppen; gi++) opts += '<option value="' + gi + '"' + (gi === gr ? ' selected' : '') + '>Gruppe ' + gi + '</option>';
+      h += '<div class="row' + (k === zeile ? ' sel' : '') + '" data-zeile="' + k + '"><span class="nr">' + k + '</span><div class="mid"><b>' + esc(SP[k].kurz) + '</b>' +
+        '<select data-zg="' + k + '">' + opts + '</select></div>' +
+        '<button class="dice" data-w="' + k + '">' + (w ? '<span class="dn">Nr. ' + w + '</span>stellt vor' : '<span class="dn">🎲</span>würfeln') + '</button></div>';
+    }
+    h += '<div class="btns"><button class="btn" id="zneu">Zeilen neu zuteilen</button></div>';
+    $('#rows').innerHTML = h;
+    $('#ohneEx').addEventListener('change', function () { aktion({ typ: 'ohneExperte', an: this.checked }); });
+    $('#zneu').addEventListener('click', function () { if (confirm('Zeilen neu auf die Gruppen verteilen? Gewürfelte Ergebnisse werden gelöscht.')) aktion({ typ: 'zeilenZuteilen' }); });
+    $$('#rows [data-zeile]').forEach(function (r) {
+      r.addEventListener('click', function (e) {
+        if (e.target.closest('select,.dice')) return;
+        zeile = +r.getAttribute('data-zeile');
+        plot.vergleich = !!SP[zeile].vergleich; plot.pins = []; plot.setPreset(SP[zeile].R); plot._bt();
+        $$('#rows .row').forEach(function (x) { x.classList.toggle('sel', x === r); });
+      });
+    });
+    $$('#rows [data-zg]').forEach(function (s) { s.addEventListener('change', function () { aktion({ typ: 'zeileGruppe', zeile: +s.getAttribute('data-zg'), gruppe: +s.value }); }); });
+    $$('#rows [data-w]').forEach(function (b) { b.addEventListener('click', function () { aktion({ typ: 'wuerfeln', zeile: +b.getAttribute('data-w') }); }); });
+    // Würfel-Animation, wenn sich ein Ergebnis geändert hat
+    for (var kk = 1; kk <= 5; kk++) {
+      if (z.gewuerfelt[kk] && alteWuerfe[kk] !== z.gewuerfelt[kk]) animieren(kk, z.gewuerfelt[kk]);
+    }
+    alteWuerfe = JSON.parse(JSON.stringify(z.gewuerfelt));
+  }
+  function animieren(k, ziel) {
+    var b = $('#rows [data-w="' + k + '"]'); if (!b) return;
+    var gr = z.zeilen[k], moegl = z.lernende.filter(function (l) { return l.gruppe === gr; }).map(function (l) { return l.sp; });
+    if (moegl.length < 2) return;
+    b.classList.add('rolling');
+    var i = 0, t = setInterval(function () {
+      b.innerHTML = '<span class="dn">Nr. ' + moegl[i++ % moegl.length] + '</span>…';
+      if (i > 9) { clearInterval(t); b.classList.remove('rolling'); b.innerHTML = '<span class="dn">Nr. ' + ziel + '</span>stellt vor'; }
+    }, 90);
+  }
+
+  function aktualisieren() {
+    if (z.phase === 'ich' || z.phase === 'du') {
+      var anz = z.lernende.length;
+      $('#auftragLK').innerHTML = '<div class="ablauf"><span class="' + (z.phase === 'ich' ? 'on' : '') + '">Ich: allein</span><span class="' + (z.phase === 'du' ? 'on' : '') + '">Du: in der Gruppe</span><span>Besprechung</span></div>' +
+        (z.phase === 'ich'
+          ? '<p style="font-size:1.3rem;margin:8px 0 0"><b>1.</b> Wähle im Tool deine Gruppe und eine Nummer. Jede Nummer gibt es pro Gruppe nur einmal.<br><b>2.</b> Arbeite allein und leise. Notiere in deinem Feld auf dem Placemat.</p>'
+          : '<p style="font-size:1.3rem;margin:8px 0 0">Stellt euch reihum eure Beobachtungen vor: Nr. 1 bis Nr. 5.<br>Alle tragen jede Zeile in ihre eigene Übersicht ein.</p>') +
+        '<p style="color:var(--muted);margin:8px 0 0;font-size:1rem">' + anz + ' Geräte angemeldet</p>';
+      gruppenKarten();
+    }
+    if (z.phase === 'besprechung' && plot) zeilenListe();
+    if (z.phase === 'reserve') {
+      var h = '';
+      for (var gi = 1; gi <= z.gruppen; gi++) h += '<div class="res-item"><span>Gruppe ' + gi + '</span><span class="math">f(x) = x<sup>−' + (z.reserve[gi] || '?') + '</sup></span></div>';
+      $('#reslist').innerHTML = h;
+    }
+  }
+}
+
+/* ================================================================== */
+if (location.pathname.replace(/\/+$/, '') === '/lehrkraft') lehrkraftApp();
+else schuelerApp();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "potenzfunktionen-negativ",
+  "version": "1.0.0",
+  "description": "Potenzfunktionen mit negativen Exponenten erkunden – Placemat in Gruppen (Live-Tool fuer den Unterricht)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "qrcode-generator": "^2.0.4",
+    "socket.io": "^4.8.4"
+  }
+}
