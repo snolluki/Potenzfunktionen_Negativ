@@ -1,6 +1,6 @@
 'use strict';
 /*
- * Potenzfunktionen mit negativen Exponenten – Placemat-Erkundung (UB Mathe 4)
+ * Potenzfunktionen f(x) = x^n mit negativem Exponenten n – Placemat-Erkundung (UB Mathe 4)
  *
  * Start lokal:  npm install  &&  npm start   ->  http://localhost:3000
  * Lernende:     /?c=CODE     (QR-Code am Smartboard)
@@ -27,7 +27,7 @@ const LEBENSDAUER_MS = 12 * 60 * 60 * 1000;
 const MAX_GRUPPEN = 8;
 const MAX_PRO_GRUPPE = 5;
 const SCHWERPUNKTE = 5;
-const PHASEN = ['einstieg', 'ich', 'du', 'besprechung', 'reserve'];
+const PHASEN = ['ich', 'du', 'besprechung', 'reserve'];
 
 const app = express();
 const server = http.createServer(app);
@@ -76,7 +76,7 @@ function neueStunde(gruppen) {
     code: neuerCode(),
     token: crypto.randomBytes(16).toString('hex'),
     gruppen,
-    phase: 'einstieg',
+    phase: 'ich',
     pause: false,
     lernende: {},          // id -> { id, gruppe, sp, seit }
     duSchritt: {},         // gruppe -> 1..6 (6 = fertig)
@@ -249,7 +249,7 @@ function ausSicherung(snap) {
   const s = neueStunde(ganz(snap.gruppen, 1, MAX_GRUPPEN) || 5);
   s.code = code;
   s.token = snap.token;
-  s.phase = PHASEN.includes(snap.phase) ? snap.phase : 'einstieg';
+  s.phase = PHASEN.includes(snap.phase) ? snap.phase : 'ich';
   for (const l of Array.isArray(snap.lernende) ? snap.lernende : []) {
     if (!l || typeof l.id !== 'string' || !/^[a-f0-9]{16}$/.test(l.id)) continue;
     const g = ganz(l.gruppe, 1, s.gruppen);
@@ -380,7 +380,7 @@ io.on('connection', socket => {
     ack = ok(ack);
     const s = stunden.get(socket.data.code);
     if (!s) return ack({ ok: false, fehler: 'Die Stunde wurde nicht gefunden.' });
-    if (!['einstieg', 'ich'].includes(s.phase)) {
+    if (s.phase !== 'ich') {
       return ack({ ok: false, fehler: 'Die Wahl ist gerade geschlossen. Melde dich bei deiner Lehrkraft.' });
     }
     const g = ganz(d && d.gruppe, 1, s.gruppen);
@@ -398,7 +398,7 @@ io.on('connection', socket => {
     ack = ok(ack);
     const s = stunden.get(socket.data.code);
     if (!s || !socket.data.id) return ack({ ok: true });
-    if (!['einstieg', 'ich'].includes(s.phase)) return ack({ ok: false, fehler: 'Die Wahl ist gerade geschlossen.' });
+    if (s.phase !== 'ich') return ack({ ok: false, fehler: 'Die Wahl ist gerade geschlossen.' });
     delete s.lernende[socket.data.id];
     abmeldenOnline(socket);
     ack({ ok: true });

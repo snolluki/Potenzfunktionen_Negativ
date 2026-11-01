@@ -35,6 +35,7 @@ header.top{display:flex;align-items:center;gap:10px;padding:8px 14px;background:
 header.top h1{font-size:1.05rem;margin:0 auto 0 0;user-select:none;-webkit-user-select:none}
 .badge{background:var(--accent-soft);color:var(--text);border:1px solid var(--accent);border-radius:999px;padding:3px 12px;font-weight:700;font-size:.95rem;white-space:nowrap}
 .linkbtn{background:none;border:0;color:var(--accent);text-decoration:underline;cursor:pointer;padding:4px;font-size:.9rem}
+.kurz{display:none}
 
 /* ---------- Karten, Knöpfe ---------- */
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
@@ -57,6 +58,7 @@ header.top h1{font-size:1.05rem;margin:0 auto 0 0;user-select:none;-webkit-user-
 .big-msg .icon{font-size:3.4rem}
 .big-msg h2{font-size:1.5rem;margin:0}
 .big-msg p{font-size:1.1rem;max-width:30em;margin:0}
+.big-msg .dots{width:min(320px,80vw)}
 .grid-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
 .grid-g button{min-height:64px;font-size:1.15rem;font-weight:700;border-radius:12px;border:1px solid var(--line);background:var(--panel);cursor:pointer}
 .grid-g button small{display:block;font-weight:400;font-size:.8rem;color:var(--muted)}
@@ -76,7 +78,6 @@ header.top h1{font-size:1.05rem;margin:0 auto 0 0;user-select:none;-webkit-user-
 .work .regler{grid-area:regler}
 .work .tabelle{grid-area:tabelle}
 .work .hilfen{grid-area:hilfen}
-.kurz{display:none}
 @media (max-width:899px){
   header.top h1 .lang{display:none}
   header.top h1 .kurz{display:inline}
@@ -100,12 +101,12 @@ header.top h1{font-size:1.05rem;margin:0 auto 0 0;user-select:none;-webkit-user-
 .auftrag .nrbig{display:inline-flex;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;align-items:center;justify-content:center;font-weight:800;margin-right:6px;font-size:1rem;vertical-align:1px}
 .auftrag ul{margin:0;padding-left:1.2em}
 .auftrag li{margin:3px 0}
+.auftrag .tipp{margin-top:8px;color:var(--muted);font-size:.95rem}
 .auftrag .note{margin-top:10px;padding:8px 10px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-weight:600;font-size:.95rem}
 .du-box{border-radius:12px;padding:12px;margin-bottom:10px;background:var(--accent-soft);border:1px solid var(--accent)}
 .du-box.me{background:var(--ok-soft);border-color:var(--ok)}
 .du-box h3{margin:0 0 6px;font-size:1.05rem}
 .du-box p{margin:0 0 8px}
-.du-box .sub{font-size:.85rem;color:var(--muted);margin-top:6px}
 .dots{display:flex;gap:6px;margin:4px 0 8px}
 .dots span{flex:1;height:8px;border-radius:4px;background:var(--line)}
 .dots span.done{background:var(--ok)}
@@ -114,13 +115,15 @@ header.top h1{font-size:1.05rem;margin:0 auto 0 0;user-select:none;-webkit-user-
 .term{font-size:1.9rem;text-align:center;padding:2px 0 6px}
 .slider label{display:flex;justify-content:space-between;align-items:baseline;font-weight:600}
 .slider .val{font-size:1.15rem}
+.slider .ends{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-top:-6px}
 input[type=range]{width:100%;height:40px;accent-color:var(--accent)}
-table.wt{border-collapse:collapse;width:100%;font-size:.98rem}
-table.wt td,table.wt th{border:1px solid var(--line);padding:5px 6px;text-align:right;font-variant-numeric:tabular-nums}
+table.wt{border-collapse:collapse;width:100%;font-size:.95rem}
+table.wt td,table.wt th{border:1px solid var(--line);padding:5px 6px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 table.wt th{background:var(--bg);font-weight:600;text-align:center}
 table.wt td.x{text-align:center;background:var(--bg);font-weight:600}
-table.wt td.sep{border:0;width:10px;background:transparent}
+table.wt td.sep{border:0;width:8px;padding:0;background:transparent}
 table.wt td.g{color:var(--muted)}
+table.wt td.leer{border:0;background:transparent}
 .wt-wrap{overflow-x:auto}
 .acc{border:1px solid var(--line);border-radius:10px;margin-top:8px;overflow:hidden}
 .acc>button{width:100%;text-align:left;background:var(--bg);border:0;padding:11px 12px;font-size:1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;min-height:44px}
@@ -134,7 +137,7 @@ table.wt td.g{color:var(--muted)}
 .acc dt{font-weight:700;margin-top:6px}
 .acc dd{margin:0 0 2px 0;color:var(--muted)}
 
-/* ---------- Lehrkraft / Smartboard ---------- */
+/* ---------- Lehrkraft (Tablet über HDMI am Smartboard) ---------- */
 body.lk{font-size:20px;background:#f3f4f6}
 .lk header.top{padding:8px 16px;gap:8px}
 .lk header.top h1{font-size:1.05rem}
@@ -148,29 +151,18 @@ body.lk{font-size:20px;background:#f3f4f6}
 @keyframes blink{50%{opacity:.25}}
 .timer button{border:0;background:none;font-size:1.2rem;cursor:pointer;padding:6px;min-width:40px;min-height:40px}
 .lk-main{padding:16px;display:grid;gap:16px}
-.cols{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:start}
-.reveal{display:inline-flex;align-items:center;justify-content:center;min-width:2.2em;min-height:1.4em;padding:0 .3em;border:2px dashed var(--accent);border-radius:8px;cursor:pointer;color:transparent;background:var(--accent-soft);vertical-align:middle;user-select:none}
-.reveal::before{content:"?";color:var(--accent);font-family:system-ui,sans-serif;font-weight:700;font-size:.7em}
-.reveal.shown{border:0;background:none;color:inherit;cursor:default;min-width:0;min-height:0;padding:0;display:inline}
-.reveal.shown::before{content:none}
-.ein-term{font-size:2.6rem;text-align:center;margin:10px 0}
-.ein-cond{font-size:1.6rem;text-align:center}
-.question{margin-top:20px;font-size:1.5rem;font-weight:700;text-align:center}
-.perm{font-size:2rem;width:100%;border-collapse:collapse}
-.perm td{padding:4px 8px}
+.cols2{display:grid;gap:16px;grid-template-columns:minmax(280px,380px) 1fr;align-items:start}
+@media (max-width:900px){.cols2{grid-template-columns:1fr}}
+.perm{width:100%;border-collapse:collapse;font-size:1.25rem}
+.perm td{padding:2px 6px}
 .perm td.l{text-align:right;white-space:nowrap}
 .perm td.eq{text-align:center;width:1em}
 .perm td.r{text-align:left;white-space:nowrap}
-.perm td.arr{font-size:1rem;color:var(--muted);text-align:left;white-space:nowrap;font-family:system-ui,sans-serif}
-.perm tr.gen td{padding-top:16px;font-size:2.4rem;font-weight:700}
+.perm-bsp{font-size:1.35rem;margin-top:10px;line-height:2.2}
 .qrbox{text-align:center}
-.qrbox svg,.qrbox img{width:min(320px,100%);height:auto;background:#fff;border-radius:12px}
-.qrbox.klein svg{width:min(200px,100%)}
-.qrbox.klein .code{font-size:1.6rem}
-.qrbox .url{font-size:1rem;color:var(--muted);word-break:break-all}
-.qrbox .code{font-size:2.2rem;font-weight:800;letter-spacing:.15em}
-.side-ein{font-size:1.4rem}
-.side-ein .gen{font-size:2rem;font-weight:700;margin-top:6px}
+.qrbox svg{width:min(240px,100%);height:auto;background:#fff;border-radius:12px}
+.qrbox .url{font-size:.95rem;color:var(--muted);word-break:break-all}
+.qrbox .code{font-size:1.8rem;font-weight:800;letter-spacing:.15em}
 .ablauf{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
 .ablauf span{padding:6px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-weight:600;font-size:1rem}
 .ablauf span.on{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -202,7 +194,7 @@ body.lk{font-size:20px;background:#f3f4f6}
 @keyframes shake{0%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}100%{transform:rotate(-6deg)}}
 .toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px 12px}
 .toolbar .term{font-size:1.6rem;padding:0}
-.toolbar input[type=range]{width:180px}
+.toolbar input[type=range]{width:200px}
 .res-list{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
 .res-item{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:1.3rem;display:flex;justify-content:space-between;align-items:center}
 .res-item .math{font-size:2rem}
@@ -222,30 +214,31 @@ body.lk{font-size:20px;background:#f3f4f6}
 
 /* ================================================================== */
 /* Inhalte                                                             */
+/* f(x) = x^n mit n = −1, −2, …, −9 (wie f(x) = x^n aus der Vorstunde)  */
 /* ================================================================== */
 
+var N_MIN = -9, N_MAX = -1, N_START = -2;
+var RECHNUNG = 'Erkläre deine Beobachtung rechnerisch, z. B. mit <span class="math">x<sup>−2</sup> = <span class="frac"><span>1</span><span>x<sup>2</sup></span></span></span>.';
 var SP = {
   1: {
     kurz: 'Nahe 0',
     frage: 'Was passiert mit dem Graphen, wenn x ganz nah an 0 kommt? Was passiert bei x = 0?',
-    zusatz: 'Erkläre deine Beobachtung rechnerisch mit <span class="math">x<sup>−n</sup> = 1/x<sup>n</sup></span>.',
-    R: 1.5,
-    tab: { art: 'liste', xs: [-0.5, -0.1, -0.01, 0, 0.01, 0.1, 0.5] },
+    zusatz: RECHNUNG,
+    tipp: 'Tipp: Mit + kannst du nah an x = 0 heranzoomen.',
     hilfen: [
-      'Schau in die Wertetabelle: Was passiert mit f(x), wenn x von 0,5 über 0,1 bis 0,01 immer näher an 0 kommt? Und links von 0, also bei −0,5, −0,1 und −0,01?',
-      'Rechne selbst: <span class="math">1/0,1² = 1/0,01 = ?</span> Und was wäre <span class="math">1/0²</span>? Kann man durch 0 teilen?'
+      'Schau in die Wertetabelle: Was passiert mit f(x), wenn x von 1 über 0,5 bis 0,1 immer näher an 0 kommt? Und links von 0, also bei −1, −0,5 und −0,1?',
+      'Rechne selbst: <span class="math">0,1<sup>−2</sup> = 1/0,1² = 1/0,01 = ?</span> Und was wäre <span class="math">0<sup>−2</sup> = 1/0²</span>? Kann man durch 0 teilen?'
     ],
     bausteine: ['Je näher x an 0 kommt, desto … wird …', 'Bei x = 0 …', 'Der Graph nähert sich der … an.']
   },
   2: {
     kurz: 'Sehr große x',
     frage: 'Was passiert mit dem Graphen, wenn x sehr groß wird – positiv und negativ?',
-    zusatz: 'Erkläre deine Beobachtung rechnerisch mit <span class="math">x<sup>−n</sup> = 1/x<sup>n</sup></span>.',
-    R: 12,
-    tab: { art: 'liste', xs: [-100, -10, -1, 1, 10, 100] },
+    zusatz: RECHNUNG,
+    tipp: 'Tipp: Mit − kannst du herauszoomen, um sehr große x zu sehen.',
     hilfen: [
-      '„Sehr groß – positiv und negativ“ heißt: x = 10 und x = 100, aber auch x = −10 und x = −100. Schau in die Wertetabelle: Was passiert mit f(x)?',
-      'Rechne selbst: <span class="math">1/100² = ?</span> Wird f(x) irgendwann genau 0? Zoome nah an die x-Achse heran: Berührt der Graph sie?'
+      '„Sehr groß – positiv und negativ“ heißt: x = 10 oder x = 100, aber auch x = −10 oder x = −100. Schau in die Wertetabelle. Zoome heraus und tippe auf den Graphen bei x = 100 und x = −100. Was passiert mit f(x)?',
+      'Rechne selbst: <span class="math">100<sup>−2</sup> = 1/100² = ?</span> Wird f(x) irgendwann genau 0? Zoome nah an die x-Achse heran: Berührt der Graph sie?'
     ],
     bausteine: ['Je größer |x| wird, desto näher kommt f(x) der Zahl …', 'f(x) wird aber nie …', 'Der Graph nähert sich der … an.']
   },
@@ -253,8 +246,7 @@ var SP = {
     kurz: 'Die beiden Teile',
     frage: 'Wie liegen die beiden Teile des Graphen zueinander?',
     zusatz: 'Begründe deine Beobachtung mit der Wertetabelle.',
-    R: 3,
-    tab: { art: 'paare', xs: [0.5, 1, 2] },
+    tipp: null,
     hilfen: [
       'Vergleiche in der Tabelle f(2) mit f(−2) und f(0,5) mit f(−0,5). Was fällt dir auf? Probiere gerade und ungerade n aus.',
       'Erinnere dich an die Potenzfunktionen mit positiven Exponenten: Klappe den Graphen in Gedanken an der y-Achse um. Oder drehe ihn einmal halb um den Ursprung (0 | 0). Was passt bei welchem n?'
@@ -265,11 +257,10 @@ var SP = {
     kurz: 'Wo verläuft der Graph?',
     frage: 'Wo im Koordinatensystem verläuft der Graph? Gibt es Punkte, durch die mehrere Graphen gehen?',
     zusatz: 'Begründe deine Beobachtung mit der Wertetabelle.',
-    R: 3,
-    tab: { art: 'paare', xs: [0.5, 1, 2] },
+    tipp: 'Tipp: Mit „Graph festhalten“ siehst du mehrere Graphen gleichzeitig.',
     hilfen: [
-      'Halte mehrere Graphen fest (n = 1, 2, 3, 4). Wo liegen sie: oberhalb oder unterhalb der x-Achse? Links oder rechts der y-Achse?',
-      'Schau in der Tabelle auf x = 1 und x = −1. Welche Funktionswerte haben die Graphen dort? Warum ist <span class="math">1/1<sup>n</sup></span> immer 1?'
+      'Halte mehrere Graphen fest, z. B. für n = −1, −2, −3 und −4. Wo liegen sie: oberhalb oder unterhalb der x-Achse? Links oder rechts der y-Achse?',
+      'Schau in der Tabelle auf x = 1 und x = −1. Welche Funktionswerte haben die Graphen dort? Rechne: <span class="math">1<sup>−3</sup> = 1/1³ = ?</span> und <span class="math">(−1)<sup>−3</sup> = 1/(−1)³ = ?</span>'
     ],
     bausteine: ['Für gerades n sind alle Funktionswerte …', 'Für ungerades n sind die Funktionswerte links von 0 … und rechts von 0 …', 'Alle Graphen gehen durch den Punkt (… | …).']
   },
@@ -277,11 +268,9 @@ var SP = {
     kurz: 'Vergleich mit positiven Exponenten',
     frage: 'Was ist anders als bei Potenzfunktionen mit positiven Exponenten? Was bleibt gleich?',
     zusatz: null,
-    R: 3,
-    vergleich: true,
-    tab: { art: 'liste', xs: [-2, -1, -0.5, 0, 0.5, 1, 2] },
+    tipp: 'Tipp: Schalte „Vergleich: positiver Exponent“ ein.',
     hilfen: [
-      'Der graue Graph zeigt zum Vergleich <span class="math">g(x) = x<sup>n</sup></span>. Stelle n = 2 ein und vergleiche die beiden Graphen. Dann n = 3.',
+      'Mit „Vergleich“ siehst du grau den Graphen mit positivem Exponenten, z. B. bei n = −2 den Graphen von <span class="math">g(x) = x<sup>2</sup></span>. Vergleiche die beiden Graphen. Probiere dann n = −3.',
       'Achte auf: Wie viele Teile hat der Graph? Gibt es den Punkt (0 | 0)? Ist der Graph symmetrisch? Welche Punkte gibt es bei x = 1 und x = −1?'
     ],
     bausteine: ['Gleich bleibt: …', 'Anders ist: …', 'Bei positiven Exponenten …, bei negativen Exponenten dagegen …']
@@ -289,20 +278,22 @@ var SP = {
 };
 var BAUSTEIN_N = 'Bei geradem n …, bei ungeradem n …';
 var WOERTER = [
+  ['Exponent', 'die hochgestellte Zahl: Bei x⁻³ ist der Exponent n = −3.'],
+  ['gerade / ungerade Zahl', 'gerade: …, −4, −2, 2, 4, … · ungerade: …, −3, −1, 1, 3, …'],
   ['Funktionswert f(x)', 'der y-Wert, der zu einem x-Wert gehört'],
   ['Betrag |x|', 'Abstand einer Zahl von 0, ohne Vorzeichen: |−100| = 100 und |100| = 100'],
   ['positiv / negativ', 'größer als 0 / kleiner als 0'],
-  ['gerade / ungerade Zahl', 'gerade: 2, 4, 6, … · ungerade: 1, 3, 5, …'],
   ['Ursprung', 'der Punkt (0 | 0)'],
   ['nicht definiert', 'Für diesen x-Wert gibt es keinen Funktionswert.'],
   ['sich annähern an', 'immer näher an etwas herankommen'],
   ['achsensymmetrisch zur y-Achse', 'Spiegelt man den Graphen an der y-Achse, passt er genau auf sich selbst.'],
   ['punktsymmetrisch zum Ursprung', 'Dreht man den Graphen einmal halb um (0 | 0), passt er genau auf sich selbst.']
 ];
-var N_MAX = 4;
+var TAB_X = [0.1, 0.5, 1, 2, 10];                                  // Wertetabelle: x und −x nebeneinander
+var TAB_X_VGL = [-10, -2, -1, -0.5, -0.1, 0, 0.1, 0.5, 1, 2, 10];  // Wertetabelle mit Vergleichsspalte
+var R_START = 3;
 var PIN_COLORS = ['#16a34a', '#9333ea', '#db2777', '#ca8a04', '#0891b2'];
 var PHASEN = [
-  { id: 'einstieg', name: 'Einstieg', min: 8 },
   { id: 'ich', name: 'Ich', min: 8 },
   { id: 'du', name: 'Du', min: 9 },
   { id: 'besprechung', name: 'Besprechung', min: 10 },
@@ -335,6 +326,7 @@ function toast(msg, bad) {
 }
 var SUPZ = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻' };
 function hoch(k) { return String(k).split('').map(function (c) { return SUPZ[c] || c; }).join(''); }
+function minus(s) { return String(s).replace(/-/g, '−'); }
 function de(v, maxDec) {
   return v.toLocaleString('de-DE', { maximumFractionDigits: maxDec, useGrouping: Math.abs(v) >= 10000 }).replace('-', '−');
 }
@@ -345,7 +337,7 @@ function fmtWert(v) {
   if (v === 0) return '0';
   var a = Math.abs(v);
   if (a >= 1000) return de(Math.round(v), 0);
-  var d = a >= 1 ? 4 : Math.min(14, Math.ceil(-Math.log10(a)) + 4);
+  var d = a >= 1 ? 4 : Math.min(14, Math.ceil(-Math.log10(a)) + 7);
   return de(+v.toFixed(d), d);
 }
 /** Abgelesener Punkt: gerundet, mit ≈ wenn gerundet wurde. */
@@ -357,15 +349,16 @@ function fmtPunkt(v) {
   var gleich = Math.abs(r - v) <= Math.abs(v) * 1e-12;
   return (gleich ? '' : '≈ ') + de(r, 14);
 }
-function f(n, x) { return Math.pow(x, -n); }
-function g(n, x) { return Math.pow(x, n); }
-function termNeg(n, mitBruch) {
-  var t = 'f(x) = x<sup>−' + n + '</sup>';
-  if (mitBruch) t += ' = <span class="frac"><span>1</span><span>' + (n === 1 ? 'x' : 'x<sup>' + n + '</sup>') + '</span></span>';
+/* n ist der (negative) Exponent */
+function f(n, x) { return Math.pow(x, n); }
+function g(n, x) { return Math.pow(x, -n); }
+function termHTML(n, mitBruch) {
+  var t = 'f(x) = x<sup>' + minus(n) + '</sup>';
+  if (mitBruch) t += ' = <span class="frac"><span>1</span><span>' + (n === -1 ? 'x' : 'x<sup>' + (-n) + '</sup>') + '</span></span>';
   return t;
 }
-function termNegText(n) { return 'f(x) = x' + hoch(-n); }
-function termPosText(n) { return 'g(x) = ' + (n === 1 ? 'x' : 'x' + hoch(n)); }
+function termText(n) { return 'f(x) = x' + hoch(n); }
+function termVglText(n) { return 'g(x) = ' + (n === -1 ? 'x' : 'x' + hoch(-n)); }
 function css(name) { return getComputedStyle(document.body).getPropertyValue(name).trim(); }
 
 /* ================================================================== */
@@ -376,7 +369,7 @@ function Plot(canvas, legend, opts) {
   var P = this;
   opts = opts || {};
   P.cv = canvas; P.ctx = canvas.getContext('2d'); P.legend = legend;
-  P.n = 2; P.R = 3; P.zoom = 1; P.pins = []; P.probeX = null; P.vergleich = false;
+  P.n = N_START; P.R = R_START; P.zoom = 1; P.pins = []; P.probeX = null; P.vergleich = false;
   P.font = opts.font || 13;
   P.W = 0; P.H = 0; P.ppu = 40; P.cx = 0; P.cy = 0;
   var touches = {}, pinch = null;
@@ -395,14 +388,13 @@ function Plot(canvas, legend, opts) {
     if (pinch && anzahl() === 2) { P.setZoom(pinch.z * abstand() / pinch.d); return; }
     if (!pinch && e.buttons) P.probe(e);
   });
-  function hoch2(e) { delete touches[e.pointerId]; if (anzahl() === 0) pinch = null; }
-  canvas.addEventListener('pointerup', hoch2);
-  canvas.addEventListener('pointercancel', hoch2);
+  function los(e) { delete touches[e.pointerId]; if (anzahl() === 0) pinch = null; }
+  canvas.addEventListener('pointerup', los);
+  canvas.addEventListener('pointercancel', los);
   canvas.addEventListener('wheel', function (e) { e.preventDefault(); P.setZoom(P.zoom * (e.deltaY < 0 ? 1.15 : 1 / 1.15)); }, { passive: false });
   if (window.ResizeObserver) new ResizeObserver(function () { P.layout(); P.draw(); }).observe(canvas.parentElement);
   window.addEventListener('resize', function () { P.layout(); P.draw(); });
 }
-Plot.prototype.setPreset = function (R) { this.R = R; this.zoom = 1; this.probeX = null; this.layout(); this.draw(); };
 Plot.prototype.setZoom = function (z) {
   var zmin = this.R / 400, zmax = this.R / 0.02;
   this.zoom = Math.max(zmin, Math.min(zmax, z)); this.layout(); this.draw();
@@ -426,6 +418,7 @@ Plot.prototype.schritt = function () {
 };
 Plot.prototype.kurve = function (fn, farbe, breite, strich, getrennt) {
   var c = this.ctx, W = this.W, H = this.H, P = this;
+  function clamp(py) { return Math.max(-10000, Math.min(H + 10000, py)); }
   c.save(); c.strokeStyle = farbe; c.lineWidth = breite; c.setLineDash(strich || []); c.lineJoin = 'round';
   function stueck(von, bis) {
     c.beginPath();
@@ -435,22 +428,20 @@ Plot.prototype.kurve = function (fn, farbe, breite, strich, getrennt) {
       if (getrennt && x === 0) continue;
       var py = P.Y(fn(x));
       if (!isFinite(py)) continue;
-      if (py < -10000) py = -10000; if (py > H + 10000) py = H + 10000;
+      py = clamp(py);
       if (erster) { c.moveTo(px, py); erster = false; } else c.lineTo(px, py);
     }
     c.stroke();
   }
   if (getrennt) {
-    var mitte = this.cx;
-    stueck(0, mitte - 0.25);
-    stueck(mitte + 0.25, W);
-    // Kurvenstücke direkt an der y-Achse ergänzen (Annäherung sichtbar bis zum Rand)
+    stueck(0, this.cx - 0.25);
+    stueck(this.cx + 0.25, W);
+    // letzte Stücke direkt an der y-Achse, damit die Annäherung bis zum Bildrand sichtbar ist
     [-1, 1].forEach(function (s) {
-      var x = s * 0.25 / P.ppu, py = P.Y(fn(x));
-      if (!isFinite(py)) return;
-      py = Math.max(-10000, Math.min(H + 10000, py));
-      var x2 = s * 1.5 / P.ppu, py2 = Math.max(-10000, Math.min(H + 10000, P.Y(fn(x2))));
-      c.beginPath(); c.moveTo(P.X(x2), py2); c.lineTo(P.X(x), py); c.stroke();
+      var x1 = s * 1.5 / P.ppu, x2 = s * 0.25 / P.ppu;
+      var y1 = P.Y(fn(x1)), y2 = P.Y(fn(x2));
+      if (!isFinite(y1) || !isFinite(y2)) return;
+      c.beginPath(); c.moveTo(P.X(x1), clamp(y1)); c.lineTo(P.X(x2), clamp(y2)); c.stroke();
     });
   } else stueck(0, W);
   c.restore();
@@ -487,9 +478,9 @@ Plot.prototype.draw = function () {
   c.fillText('x', W - 16, this.cy - 10);
   c.fillText('y', this.cx + 10, 16);
 
-  if (this.vergleich) { var nn = this.n; this.kurve(function (x) { return g(nn, x); }, css('--ref'), 2.5, [4, 6], false); }
-  this.pins.forEach(function (p) { P.kurve(function (x) { return f(p.n, x); }, p.color, 2.5, [8, 5], true); });
   var n = this.n;
+  if (this.vergleich) this.kurve(function (x) { return g(n, x); }, css('--ref'), 2.5, [4, 6], false);
+  this.pins.forEach(function (p) { P.kurve(function (x) { return f(p.n, x); }, p.color, 2.5, [8, 5], true); });
   this.kurve(function (x) { return f(n, x); }, css('--accent'), 3.5, null, true);
 
   if (this.probeX !== null) {
@@ -522,9 +513,9 @@ Plot.prototype.draw = function () {
 };
 Plot.prototype.legende = function () {
   if (!this.legend) return;
-  var h = '<div class="chip"><span class="sw" style="background:' + css('--accent') + '"></span>' + termNegText(this.n) + '</div>';
-  h += this.pins.map(function (p) { return '<div class="chip"><span class="sw" style="background:' + p.color + '"></span>' + termNegText(p.n) + '</div>'; }).join('');
-  if (this.vergleich) h += '<div class="chip"><span class="sw" style="background:' + css('--ref') + '"></span>Vergleich: ' + termPosText(this.n) + '</div>';
+  var h = '<div class="chip"><span class="sw" style="background:' + css('--accent') + '"></span>' + termText(this.n) + '</div>';
+  h += this.pins.map(function (p) { return '<div class="chip"><span class="sw" style="background:' + p.color + '"></span>' + termText(p.n) + '</div>'; }).join('');
+  if (this.vergleich) h += '<div class="chip"><span class="sw" style="background:' + css('--ref') + '"></span>Vergleich: ' + termVglText(this.n) + '</div>';
   this.legend.innerHTML = h;
 };
 Plot.prototype.probe = function (e) {
@@ -562,19 +553,25 @@ function plotAnbinden(box, opts) {
   });
   return p;
 }
+function reglerHTML(id) {
+  return '<div class="slider"><label for="' + id + '"><span>Exponent n</span><span class="val math" data-nv></span></label>' +
+    '<input type="range" id="' + id + '" min="' + N_MIN + '" max="' + N_MAX + '" step="1" value="' + N_START + '">' +
+    '<div class="ends math"><span>' + minus(N_MIN) + '</span><span>' + minus(N_MAX) + '</span></div></div>';
+}
 
-function tabelleHTML(sp, n, vergleich) {
-  var t = SP[sp].tab, h;
-  if (t.art === 'paare') {
+function tabelleHTML(n, vergleich) {
+  var h;
+  if (!vergleich) {
     h = '<table class="wt"><tr><th>x</th><th>f(x)</th><td class="sep"></td><th>x</th><th>f(x)</th></tr>';
-    t.xs.forEach(function (x) {
+    h += '<tr><td class="x">0</td><td>–</td><td class="sep"></td><td class="leer" colspan="2"></td></tr>';
+    TAB_X.forEach(function (x) {
       h += '<tr><td class="x">' + fmtX(x) + '</td><td>' + fmtWert(f(n, x)) + '</td><td class="sep"></td><td class="x">' + fmtX(-x) + '</td><td>' + fmtWert(f(n, -x)) + '</td></tr>';
     });
     return h + '</table>';
   }
-  h = '<table class="wt"><tr><th>x</th><th>' + termNegText(n) + '</th>' + (vergleich ? '<th>' + termPosText(n) + '</th>' : '') + '</tr>';
-  t.xs.forEach(function (x) {
-    h += '<tr><td class="x">' + fmtX(x) + '</td><td>' + (x === 0 ? '–' : fmtWert(f(n, x))) + '</td>' + (vergleich ? '<td class="g">' + fmtWert(g(n, x)) + '</td>' : '') + '</tr>';
+  h = '<table class="wt"><tr><th>x</th><th>' + termText(n) + '</th><th>' + termVglText(n) + '</th></tr>';
+  TAB_X_VGL.forEach(function (x) {
+    h += '<tr><td class="x">' + fmtX(x) + '</td><td>' + (x === 0 ? '–' : fmtWert(f(n, x))) + '</td><td class="g">' + fmtWert(g(n, x)) + '</td></tr>';
   });
   return h + '</table>';
 }
@@ -592,64 +589,57 @@ function schuelerApp() {
   var app = $('#app');
 
   app.innerHTML =
-    '<header class="top"><h1><span class="lang">Potenzfunktionen mit negativen Exponenten</span><span class="kurz math">f(x) = x<sup>−n</sup></span></h1><span class="badge hidden" id="badge"></span><button class="linkbtn hidden" id="aendern">ändern</button></header>' +
+    '<header class="top"><h1><span class="lang">Potenzfunktionen mit negativen Exponenten</span><span class="kurz"></span></h1><span class="badge hidden" id="badge"></span><button class="linkbtn hidden" id="aendern">ändern</button></header>' +
     '<div id="screen"></div>' +
     '<div class="work hidden" id="work">' +
       '<section class="card auftrag" id="auftrag"></section>' +
       graphHTML('gbox') +
-      '<section class="card regler"><div class="term math" id="term"></div>' +
-        '<div class="slider"><label for="sn"><span>n</span><span class="val math" id="vn"></span></label>' +
-        '<input type="range" id="sn" min="1" max="' + N_MAX + '" step="1" value="2"></div>' +
-        '<div class="btns"><button class="btn" id="pin">Graph festhalten</button><button class="btn" id="clear">Festgehaltene löschen</button><button class="btn hidden" id="vgl">Vergleich: x<sup>n</sup></button></div></section>' +
+      '<section class="card regler"><div class="term math" id="term"></div>' + reglerHTML('sn') +
+        '<div class="btns"><button class="btn" id="pin">Graph festhalten</button><button class="btn" id="clear">Festgehaltene löschen</button><button class="btn" id="vgl">Vergleich: positiver Exponent</button></div></section>' +
       '<section class="card tabelle"><h2>Wertetabelle</h2><div class="wt-wrap" id="tab"></div></section>' +
       '<section class="card hilfen" id="hilfen"></section>' +
     '</div>';
 
   var plot = plotAnbinden($('#gbox'));
-  var gezeigt = null;      // Schwerpunkt, dessen Ansicht gerade eingestellt ist
-  var hilfeStufe = 0;
+  var hilfeSp = null, hilfeStufe = {};
   var freiSp = 1;
 
   function regler() {
-    $('#term').innerHTML = termNeg(plot.n, true);
-    $('#vn').textContent = 'n = ' + plot.n;
+    $('#term').innerHTML = termHTML(plot.n, true);
+    $('#work [data-nv]').textContent = 'n = ' + minus(plot.n);
     $('#sn').value = plot.n;
     $('#vgl').classList.toggle('on', plot.vergleich);
-    $('#tab').innerHTML = tabelleHTML(gezeigt || 1, plot.n, plot.vergleich);
+    $('#tab').innerHTML = tabelleHTML(plot.n, plot.vergleich);
   }
   $('#sn').addEventListener('input', function () { plot.n = +this.value; plot.draw(); regler(); });
   $('#pin').addEventListener('click', function () { plot.festhalten(); });
   $('#clear').addEventListener('click', function () { plot.loeschen(); });
   $('#vgl').addEventListener('click', function () { plot.vergleich = !plot.vergleich; plot.draw(); regler(); });
+  regler();
 
-  function ansichtEinstellen(sp) {
-    if (gezeigt === sp) return;
-    gezeigt = sp;
-    hilfeStufe = 0;
-    plot.pins = [];
-    plot.vergleich = !!SP[sp].vergleich;
-    $('#vgl').classList.toggle('hidden', !SP[sp].vergleich);
-    plot.setPreset(SP[sp].R);
-    regler();
+  function hilfenZeigen(sp) {
+    if (!sp) { $('#hilfen').classList.add('hidden'); hilfeSp = null; return; }
+    $('#hilfen').classList.remove('hidden');
+    if (hilfeSp === sp) return;
+    hilfeSp = sp;
     hilfenZeichnen();
   }
-
   function hilfenZeichnen() {
-    var s = SP[gezeigt];
+    var s = SP[hilfeSp], stufe = hilfeStufe[hilfeSp] || 0;
     var h = '<h2>Hilfen</h2><p style="margin:0;font-size:.9rem;color:var(--muted)">Öffne eine Hilfe erst, wenn du nicht weiterkommst.</p>';
     s.hilfen.forEach(function (t, i) {
-      var offen = i < hilfeStufe, frei2 = i <= hilfeStufe;
+      var offen = i < stufe, frei2 = i <= stufe;
       h += '<div class="acc' + (offen ? ' open' : '') + '"><button data-h="' + i + '"' + (frei2 ? '' : ' disabled') + '><span>Hilfe ' + (i + 1) + '</span><span>' + (offen ? '✓' : frei2 ? 'öffnen' : '🔒') + '</span></button><div class="txt">' + t + '</div></div>';
     });
-    h += '<div class="acc" data-t="1"><button data-t="1"><span>Satzbausteine</span><span>▾</span></button><div class="txt"><ul>' +
+    h += '<div class="acc"><button data-t="1"><span>Satzbausteine</span><span>▾</span></button><div class="txt"><ul>' +
       s.bausteine.concat([BAUSTEIN_N]).map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul></div></div>';
-    h += '<div class="acc" data-t="1"><button data-t="1"><span>Wörter</span><span>▾</span></button><div class="txt"><dl>' +
+    h += '<div class="acc"><button data-t="1"><span>Wörter</span><span>▾</span></button><div class="txt"><dl>' +
       WOERTER.map(function (w) { return '<dt>' + esc(w[0]) + '</dt><dd>' + esc(w[1]) + '</dd>'; }).join('') + '</dl></div></div>';
     $('#hilfen').innerHTML = h;
     $$('#hilfen button[data-h]').forEach(function (b) {
       b.addEventListener('click', function () {
         var i = +b.getAttribute('data-h');
-        if (i === hilfeStufe) { hilfeStufe++; hilfenZeichnen(); }
+        if (i === (hilfeStufe[hilfeSp] || 0)) { hilfeStufe[hilfeSp] = i + 1; hilfenZeichnen(); }
       });
     });
     $$('#hilfen button[data-t]').forEach(function (b) {
@@ -657,21 +647,26 @@ function schuelerApp() {
     });
   }
 
-  function auftragHTML(sp, mitZusatz) {
+  function auftragHTML(sp, voll, ohneNotiz) {
     var s = SP[sp];
     var h = '<div class="q"><span class="nrbig">' + sp + '</span>' + esc(s.frage) + '</div>';
-    if (mitZusatz) {
+    if (voll) {
       h += '<ul><li>Verändere n. Hängt deine Beobachtung von n ab?</li>' +
         (s.zusatz ? '<li>' + s.zusatz + '</li>' : '') +
         '<li>Was fällt dir außerdem auf?</li></ul>' +
-        '<div class="note">✎ Notiere alles in deinem Feld auf dem Placemat.</div>';
+        (s.tipp ? '<div class="tipp">💡 ' + esc(s.tipp) + '</div>' : '') +
+        (ohneNotiz ? '' : '<div class="note">✎ Notiere alles in deinem Feld auf dem Placemat.</div>');
     }
     return h;
+  }
+  function punkte(k) {
+    var h = '<div class="dots">';
+    for (var i = 1; i <= 5; i++) h += '<span class="' + (i < k ? 'done' : i === k ? 'cur' : '') + '"></span>';
+    return h + '</div>';
   }
 
   var letzteSeite = null;
   function nachOben(schluessel) {
-    // beim Wechsel von Phase oder Vorstellungsschritt an den Seitenanfang springen
     if (schluessel !== letzteSeite) { letzteSeite = schluessel; window.scrollTo(0, 0); }
   }
   function kopfhoehe() {
@@ -693,11 +688,11 @@ function schuelerApp() {
     if (ansicht && ansicht.ich) {
       b.textContent = 'Gruppe ' + ansicht.ich.gruppe + ' · Nr. ' + ansicht.ich.sp;
       b.classList.remove('hidden');
-      a.classList.toggle('hidden', !['einstieg', 'ich'].includes(ansicht.phase) || ansicht.pause);
+      a.classList.toggle('hidden', ansicht.phase !== 'ich' || ansicht.pause);
     } else { b.classList.add('hidden'); a.classList.add('hidden'); }
   }
   $('#aendern').addEventListener('click', function () {
-    if (!socket || !confirm('Gruppe oder Schwerpunkt ändern? Deine Nummer wird dann wieder frei.')) return;
+    if (!socket || !confirm('Gruppe oder Nummer ändern? Deine Nummer wird dann wieder frei.')) return;
     socket.emit('s:abmelden', {}, function (r) {
       if (r && !r.ok) return toast(r.fehler, true);
       meineId = null; speichern(null); gewaehlteGruppe = null;
@@ -718,8 +713,7 @@ function schuelerApp() {
     h += '</div>' + auftragHTML(freiSp, true);
     $('#auftrag').innerHTML = h;
     $$('#auftrag [data-f]').forEach(function (b) { b.addEventListener('click', function () { freiSp = +b.getAttribute('data-f'); freiZeichnen(); }); });
-    ansichtEinstellen(freiSp);
-    $('#hilfen').classList.remove('hidden');
+    hilfenZeigen(freiSp);
     arbeitZeigen(true);
   }
 
@@ -751,7 +745,7 @@ function schuelerApp() {
     screen('<div class="big-msg"><div class="icon">📡</div><h2>Verbinde …</h2><p>Einen Moment bitte.</p><div id="langsam"></div></div>');
     verbindeT = setTimeout(function () {
       var l = $('#langsam');
-      if (l) l.innerHTML = '<p>Das dauert ungewöhnlich lange. Wenn es nicht klappt, kannst du ohne Anmeldung arbeiten und dir einen Schwerpunkt aussuchen.</p><button class="btn" id="frei2">Ohne Anmeldung erkunden</button>';
+      if (l) l.innerHTML = '<p>Das dauert ungewöhnlich lange. Wenn es nicht klappt, kannst du ohne Anmeldung arbeiten und dir eine Nummer aussuchen.</p><button class="btn" id="frei2">Ohne Anmeldung erkunden</button>';
       var b = $('#frei2'); if (b) b.addEventListener('click', freiStarten);
     }, 10000);
     socket = window.io({ transports: ['websocket', 'polling'] });
@@ -779,64 +773,56 @@ function schuelerApp() {
       return screen('<div class="big-msg"><div class="icon">✋</div><h2>Bitte schaut nach vorn</h2><p>Gleich geht es weiter.</p></div>');
     }
     var ph = v.phase, ich = v.ich;
-    if (ph === 'einstieg') {
-      return screen('<div class="big-msg"><div class="icon">👍</div><h2>Du bist angemeldet</h2><p>Gruppe ' + ich.gruppe + ', Schwerpunkt Nr. ' + ich.sp + ':<br><b>' + esc(SP[ich.sp].frage) + '</b></p><p>Schau nach vorn. Es geht gleich los.</p></div>');
-    }
     if (ph === 'besprechung') {
-      return screen('<div class="big-msg"><div class="icon">🗣️</div><h2>Besprechung</h2><p>Schaut zum Smartboard. Ergänzt oder verbessert eure Übersicht in eigenen Worten.</p></div>');
+      return screen('<div class="big-msg"><div class="icon">🗣️</div><h2>Besprechung</h2><p>Schaut nach vorn. Ergänzt oder verbessert eure Übersicht in eigenen Worten.</p></div>');
     }
     if (ph === 'reserve') {
       var r = v.reserve;
-      return screen('<div class="big-msg"><div class="icon">✏️</div><h2>Eure Funktion</h2><p class="math" style="font-size:2.4rem">' + (r ? 'f(x) = x<sup>−' + r + '</sup>' : '–') + '</p><p>Skizziert den Graphen <b>ohne Tool</b> in der Mitte eures Placemats. Beschriftet ihn mit den Eigenschaften aus eurer Übersicht.</p></div>');
+      return screen('<div class="big-msg"><div class="icon">✏️</div><h2>Eure Funktion</h2><p class="math" style="font-size:2.4rem">' + (r ? 'f(x) = x<sup>−' + r + '</sup>' : '–') + '</p><p>Skizziert den Graphen in der Mitte eures Placemats. Beschriftet ihn mit den Eigenschaften aus eurer Übersicht.</p></div>');
     }
     if (ph === 'du') return duZeigen(v);
     // Ich-Phase
     $('#auftrag').innerHTML = auftragHTML(ich.sp, true);
-    ansichtEinstellen(ich.sp);
-    $('#hilfen').classList.remove('hidden');
+    hilfenZeigen(ich.sp);
     arbeitZeigen(true);
   }
 
   function duZeigen(v) {
-    var ich = v.ich, k = v.du.schritt, h = '<div class="dots">';
-    for (var i = 1; i <= 5; i++) h += '<span class="' + (i < k ? 'done' : i === k ? 'cur' : '') + '"></span>';
-    h += '</div>';
+    var ich = v.ich, k = v.du.schritt;
     if (k > 5) {
-      h = '<div class="du-box me"><h3>Alle Zeilen sind vorgestellt</h3>' + h +
-        '<p>Prüft gemeinsam: Steht in jeder Zeile eurer Übersicht etwas? Einigt euch auf Formulierungen, die jede und jeder von euch vorstellen kann.</p></div>';
-      $('#auftrag').innerHTML = h + auftragHTML(ich.sp, false);
-      ansichtEinstellen(ich.sp);
-    } else {
-      var weiter = k < 5 ? 'weiter zu Nr. ' + (k + 1) : 'Runde beenden';
-      if (ich.sp === k) {
-        h = '<div class="du-box me"><h3>Du bist dran: Nr. ' + k + '</h3>' + h +
-          '<p>Zeige deinen Graphen und erkläre deiner Gruppe, was du herausgefunden hast. Die anderen tragen es in Zeile ' + k + ' ihrer Übersicht ein.</p>' +
-          '<button class="btn ok" id="weiter">Fertig erklärt – ' + weiter + '</button></div>';
-      } else if (v.du.experte) {
-        h = '<div class="du-box"><h3>Nr. ' + k + ' erklärt</h3>' + h +
-          '<p>Hör zu und trage Zeile ' + k + ' in deine Übersicht ein. Prüfe die Beobachtung auf deinem Gerät. Frag nach, wenn du etwas nicht verstehst.</p>' +
-          '<button class="btn" id="weiter">' + (k < 5 ? 'Weiter zu Nr. ' + (k + 1) : 'Runde beenden') + '</button><div class="sub">Erst tippen, wenn Nr. ' + k + ' fertig ist.</div></div>';
-      } else {
-        h = '<div class="du-box"><h3>Nr. ' + k + ': gemeinsam untersuchen</h3>' + h +
-          '<p>Diesen Schwerpunkt hat in eurer Gruppe niemand untersucht. Untersucht ihn jetzt gemeinsam auf euren Geräten und tragt Zeile ' + k + ' in eure Übersicht ein.</p>' +
-          '<button class="btn" id="weiter">Fertig – ' + weiter + '</button></div>';
-      }
-      $('#auftrag').innerHTML = h + auftragHTML(k, false);
-      ansichtEinstellen(k);
-      $('#weiter').addEventListener('click', function () {
-        this.disabled = true;
-        socket.emit('s:weiter', { von: k }, function () {});
-      });
+      return screen('<div class="big-msg"><div class="icon">✅</div><h2>Alle Zeilen sind vorgestellt</h2>' + punkte(6) +
+        '<p>Prüft gemeinsam: Steht in jeder Zeile eurer Übersicht etwas? Einigt euch auf Formulierungen, die jede und jeder von euch vorstellen kann.</p></div>');
     }
-    $('#hilfen').classList.add('hidden');
+    if (ich.sp !== k && v.du.experte) {
+      // Zuhören: das Tool ist gesperrt
+      return screen('<div class="big-msg"><div class="icon">👂</div><h2>Nr. ' + k + ' erklärt</h2>' + punkte(k) +
+        '<p><b>' + esc(SP[k].frage) + '</b></p>' +
+        '<p>Hör zu und trage Zeile ' + k + ' in deine Übersicht ein. Frag nach, wenn du etwas nicht verstehst.</p></div>');
+    }
+    var weiter = k < 5 ? 'weiter zu Nr. ' + (k + 1) : 'Runde beenden', h;
+    if (ich.sp === k) {
+      h = '<div class="du-box me"><h3>Du bist dran: Nr. ' + k + '</h3>' + punkte(k) +
+        '<p>Zeige deiner Gruppe deinen Graphen und erkläre, was du herausgefunden hast. Die anderen tragen es in Zeile ' + k + ' ihrer Übersicht ein.</p>' +
+        '<button class="btn ok" id="weiter">Fertig erklärt – ' + weiter + '</button></div>' + auftragHTML(k, false);
+      hilfenZeigen(null);
+    } else {
+      h = '<div class="du-box"><h3>Nr. ' + k + ': gemeinsam untersuchen</h3>' + punkte(k) +
+        '<p>Diese Nummer hat in eurer Gruppe niemand untersucht. Untersucht sie jetzt gemeinsam und tragt Zeile ' + k + ' in eure Übersicht ein.</p>' +
+        '<button class="btn" id="weiter">Fertig – ' + weiter + '</button></div>' + auftragHTML(k, true, true);
+      hilfenZeigen(k);
+    }
+    $('#auftrag').innerHTML = h;
+    $('#weiter').addEventListener('click', function () {
+      this.disabled = true;
+      socket.emit('s:weiter', { von: k }, function () {});
+    });
     arbeitZeigen(true);
   }
 
   function wahlZeigen() {
     var v = ansicht;
-    if (!['einstieg', 'ich'].includes(v.phase)) {
-      screen('<div class="big-msg"><div class="icon">🔒</div><h2>Die Anmeldung ist geschlossen</h2><p>Melde dich bei deiner Lehrkraft. Bis dahin kannst du ohne Anmeldung mitarbeiten.</p><button class="btn" id="frei5">Ohne Anmeldung erkunden</button></div>');
-      $('#frei5').addEventListener('click', freiStarten);
+    if (v.phase !== 'ich') {
+      screen('<div class="big-msg"><div class="icon">🔒</div><h2>Die Anmeldung ist geschlossen</h2><p>Melde dich bei deiner Lehrkraft.</p></div>');
       return;
     }
     if (!gewaehlteGruppe || gewaehlteGruppe > v.gruppen) {
@@ -878,7 +864,7 @@ function schuelerApp() {
   /* ----- Start ----- */
   if (frei) return freiStarten();
   if (!code) {
-    screen('<div class="screen"><h2>Code eingeben</h2><p>Scanne den QR-Code am Smartboard oder gib den Code ein.</p>' +
+    screen('<div class="screen"><h2>Code eingeben</h2><p>Scanne den QR-Code oder gib den Code ein.</p>' +
       '<input class="input" id="codein" maxlength="4" autocapitalize="characters" autocomplete="off" placeholder="z. B. K7QF" style="text-transform:uppercase;letter-spacing:.2em">' +
       '<div class="btns"><button class="btn primary" id="go">Weiter</button><button class="btn" id="frei4">Ohne Anmeldung erkunden</button></div></div>');
     $('#go').addEventListener('click', function () {
@@ -894,7 +880,7 @@ function schuelerApp() {
 }
 
 /* ================================================================== */
-/* Lehrkraft / Smartboard                                              */
+/* Lehrkraft (Tablet, über HDMI am Smartboard)                         */
 /* ================================================================== */
 
 function lehrkraftApp() {
@@ -910,7 +896,6 @@ function lehrkraftApp() {
   var z = null;                                       // Zustand vom Server
   var gebaut = null;                                  // Phase, für die der Inhalt gebaut wurde
   var plot = null, zeile = 1, alteWuerfe = {};
-  var einstieg = speicher.getJSON('pfn_lk_ein', {});
   var timer = { rest: 0, laeuft: false, t: null, phase: null };
 
   fetch('/config.json').then(function (r) { return r.json(); }).then(function (c) { cfg = c; if (!z) start(); }).catch(function () {});
@@ -934,7 +919,7 @@ function lehrkraftApp() {
 
   socket.on('connect', function () { if (sitzung) beitreten(); else start(); });
   socket.on('lk:zustand', zustandSetzen);
-  socket.on('lk:beendet', function () { speicher.del('pfn_lk'); speicher.del('pfn_lk_snap'); speicher.del('pfn_lk_ein'); sitzung = null; z = null; einstieg = {}; start(); });
+  socket.on('lk:beendet', function () { speicher.del('pfn_lk'); speicher.del('pfn_lk_snap'); sitzung = null; z = null; start(); });
 
   function beitreten() {
     socket.emit('lk:beitreten', sitzung, function (r) {
@@ -966,7 +951,7 @@ function lehrkraftApp() {
       '<div class="stepper" style="margin:12px 0"><span>Anzahl der Gruppen:</span><button id="gm">−</button><b id="gz">5</b><button id="gp">+</button></div>' +
       (cfg.passwortNoetig ? '<label>Passwort<input class="input" type="password" id="pw" value="' + esc(speicher.get('pfn_pw') || '') + '"></label>' : '') +
       '<div class="btns"><button class="btn primary" id="anlegen">Stunde anlegen</button></div>' +
-      '<p style="font-size:.9rem;color:var(--muted);margin-top:14px">Tipp: Öffne diese Seite ein paar Minuten vor der Stunde. Der kostenlose Server bei Render braucht nach einer Pause bis zu einer Minute zum Aufwachen.</p></div></div>';
+      '<p style="font-size:.9rem;color:var(--muted);margin-top:14px">Tipp: Lege die Stunde vor dem Unterricht an. Der kostenlose Server bei Render braucht nach einer Pause bis zu einer Minute zum Aufwachen.</p></div></div>';
     var gz = 5;
     $('#gm').addEventListener('click', function () { gz = Math.max(1, gz - 1); $('#gz').textContent = gz; });
     $('#gp').addEventListener('click', function () { gz = Math.min(8, gz + 1); $('#gz').textContent = gz; });
@@ -977,7 +962,6 @@ function lehrkraftApp() {
         if (cfg.passwortNoetig) speicher.set('pfn_pw', pw);
         sitzung = { code: r.code, token: r.token };
         speicher.setJSON('pfn_lk', sitzung);
-        einstieg = {}; speicher.setJSON('pfn_lk_ein', einstieg);
         zustandSetzen(r.zustand);
       });
     });
@@ -1009,7 +993,7 @@ function lehrkraftApp() {
   /* ----- Grundgerüst ----- */
   function geruest() {
     var tabs = PHASEN.map(function (p) { return '<button data-ph="' + p.id + '">' + p.name + '</button>'; }).join('');
-    app.innerHTML = '<header class="top"><h1>Potenzfunktionen x<sup>−n</sup></h1>' +
+    app.innerHTML = '<header class="top"><h1>Negative Exponenten</h1>' +
       '<div class="tabs">' + tabs + '<button class="pause" data-pause="1">✋ Geräte sperren</button></div>' +
       '<div class="timer" id="timer"><span class="t">0:00</span><button data-tm="go" aria-label="Start/Pause">▶</button><button data-tm="re" aria-label="Zurücksetzen">↺</button></div>' +
       '<span class="badge" id="codebadge"></span><button class="btn" id="menu" aria-label="Einstellungen">⚙</button></header>' +
@@ -1029,7 +1013,6 @@ function lehrkraftApp() {
       '<div class="btns" style="flex-direction:column;align-items:stretch">' +
       '<button class="btn" data-m="voll">Vollbild an/aus</button>' +
       '<button class="btn" data-m="dureset">Vorstellungsrunde aller Gruppen auf Nr. 1 zurücksetzen</button>' +
-      '<button class="btn" data-m="einreset">Einstieg wieder verdecken</button>' +
       '<button class="btn" data-m="ende" style="color:var(--bad)">Stunde beenden (Daten löschen)</button>' +
       '<button class="btn primary" data-m="zu">Schließen</button></div></div>';
     document.body.appendChild(d);
@@ -1041,7 +1024,6 @@ function lehrkraftApp() {
       if (m === 'gm' || m === 'gp') { aktion({ typ: 'gruppenzahl', n: z.gruppen + (m === 'gp' ? 1 : -1) }); d.remove(); }
       if (m === 'voll') { if (document.fullscreenElement) document.exitFullscreen(); else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); d.remove(); }
       if (m === 'dureset') { aktion({ typ: 'duAlleNeu' }); d.remove(); }
-      if (m === 'einreset') { einstieg = {}; speicher.setJSON('pfn_lk_ein', einstieg); gebaut = null; zeichnen(); d.remove(); }
       if (m === 'ende') { if (confirm('Stunde beenden? Alle Anmeldungen werden gelöscht.')) aktion({ typ: 'beenden' }); d.remove(); }
       if (m === 'zu') d.remove();
     });
@@ -1055,88 +1037,69 @@ function lehrkraftApp() {
     $('[data-pause]').textContent = z.pause ? '✋ Geräte gesperrt' : '✋ Geräte sperren';
     $('#codebadge').textContent = 'Code ' + z.code;
     if (timer.phase !== z.phase) timerSetzen(z.phase);
-    if (gebaut !== z.phase) { bauen(z.phase); gebaut = z.phase; }
+    var art = (z.phase === 'ich' || z.phase === 'du') ? 'ichdu' : z.phase;
+    if (gebaut !== art) { bauen(art); gebaut = art; }
     aktualisieren();
   }
 
-  var URL_S = function () { return location.origin + '/?c=' + z.code; };
-  function qrHTML(gross) {
-    var url = URL_S(), svg = '';
+  function qrHTML() {
+    var url = location.origin + '/?c=' + z.code, svg = '';
     if (!window.__ohneQR && typeof window.qrcode === 'function') {
       var q = window.qrcode(0, 'M'); q.addData(url); q.make();
-      svg = q.createSvgTag({ cellSize: gross ? 8 : 5, margin: 2, scalable: true });
+      svg = q.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
     }
-    return '<div class="qrbox' + (gross ? '' : ' klein') + '">' + svg + '<div class="code">' + esc(z.code) + '</div><div class="url">' + esc(url) + '</div></div>';
+    return '<div class="qrbox">' + svg + '<div class="code">' + esc(z.code) + '</div><div class="url">' + esc(url) + '</div></div>';
   }
-  function rev(key, inhalt) {
-    return '<span class="reveal' + (einstieg[key] ? ' shown' : '') + '" data-rv="' + key + '">' + inhalt + '</span>';
-  }
-  function permHTML(alles) {
+  function permHTML() {
     var zeilen = [
-      ['2<sup>3</sup>', '8'], ['2<sup>2</sup>', '4'], ['2<sup>1</sup>', '2'],
-      ['2<sup>0</sup>', rv('p0', '1')],
-      ['2<sup>−1</sup>', rv('p1', '<span class="frac"><span>1</span><span>2</span></span> = <span class="frac"><span>1</span><span>2<sup>1</sup></span></span>')],
-      ['2<sup>−2</sup>', rv('p2', '<span class="frac"><span>1</span><span>4</span></span> = <span class="frac"><span>1</span><span>2<sup>2</sup></span></span>')],
-      ['2<sup>−3</sup>', rv('p3', '<span class="frac"><span>1</span><span>8</span></span> = <span class="frac"><span>1</span><span>2<sup>3</sup></span></span>')]
+      ['2<sup>3</sup>', '8'], ['2<sup>2</sup>', '4'], ['2<sup>1</sup>', '2'], ['2<sup>0</sup>', '1'],
+      ['2<sup>−1</sup>', '<span class="frac"><span>1</span><span>2</span></span> = <span class="frac"><span>1</span><span>2<sup>1</sup></span></span>'],
+      ['2<sup>−2</sup>', '<span class="frac"><span>1</span><span>4</span></span> = <span class="frac"><span>1</span><span>2<sup>2</sup></span></span>'],
+      ['2<sup>−3</sup>', '<span class="frac"><span>1</span><span>8</span></span> = <span class="frac"><span>1</span><span>2<sup>3</sup></span></span>']
     ];
-    function rv(k, t) { return alles ? t : rev(k, t); }
     var h = '<table class="perm math">';
-    zeilen.forEach(function (r, i) {
-      h += '<tr><td class="l">' + r[0] + '</td><td class="eq">=</td><td class="r">' + r[1] + '</td><td class="arr">' + (i < zeilen.length - 1 ? '↓ : 2' : '') + '</td></tr>';
-    });
-    h += '<tr class="gen"><td class="l">x<sup>−n</sup></td><td class="eq">=</td><td class="r" colspan="2">' + rv('gen', '<span class="frac"><span>1</span><span>x<sup>n</sup></span></span>') + '</td></tr></table>';
+    zeilen.forEach(function (r) { h += '<tr><td class="l">' + r[0] + '</td><td class="eq">=</td><td class="r">' + r[1] + '</td></tr>'; });
+    h += '</table><div class="perm-bsp math">' +
+      'x<sup>−1</sup> = <span class="frac"><span>1</span><span>x</span></span>, &nbsp;' +
+      'x<sup>−2</sup> = <span class="frac"><span>1</span><span>x<sup>2</sup></span></span>, &nbsp;' +
+      'x<sup>−3</sup> = <span class="frac"><span>1</span><span>x<sup>3</sup></span></span>, …</div>';
     return h;
   }
 
-  function bauen(phase) {
+  function bauen(art) {
     var el = $('#inhalt');
     plot = null;
-    if (phase === 'einstieg') {
-      el.innerHTML = '<div class="cols">' +
-        '<div class="card"><div class="ein-term math">f(x) = ' + rev('a', 'a') + ' · x<sup>' + rev('n', 'n') + '</sup></div>' +
-        '<div class="ein-cond math">mit ' + rev('a0', 'a ≠ 0') + ' und ' + rev('nN', 'n ∈ ℕ = {1; 2; 3; …}') + '</div>' +
-        '<div class="question">' + rev('frage', 'Was passiert, wenn der Exponent negativ wird?') + '</div></div>' +
-        '<div class="card">' + permHTML(false) + '</div>' +
-        '<div class="card"><h2>Auftrag</h2><p style="font-size:1.25rem">Untersuche, wie die Graphen von <span class="math">f(x) = x<sup>−n</sup></span> aussehen.</p>' +
-        '<div id="qrslot">' + (einstieg.qr ? qrHTML(true) : '<button class="btn primary" id="qrzeigen">QR-Code zeigen</button>') + '</div></div></div>';
-      $$('[data-rv]', el).forEach(function (s) {
-        s.addEventListener('click', function () { einstieg[s.getAttribute('data-rv')] = 1; speicher.setJSON('pfn_lk_ein', einstieg); s.classList.add('shown'); });
-      });
-      var qb = $('#qrzeigen');
-      if (qb) qb.addEventListener('click', function () { einstieg.qr = 1; speicher.setJSON('pfn_lk_ein', einstieg); $('#qrslot').innerHTML = qrHTML(true); });
-      return;
-    }
-    if (phase === 'ich' || phase === 'du') {
-      el.innerHTML = '<div class="cols" style="grid-template-columns:minmax(300px,420px) 1fr">' +
-        '<div style="display:grid;gap:16px"><div class="card side-ein"><h2>Aus dem Einstieg</h2>' + permHTML(true) + '</div>' +
-        '<div class="card">' + qrHTML(false) + '</div></div>' +
+    if (art === 'ichdu') {
+      el.innerHTML = '<div class="cols2">' +
+        '<div style="display:grid;gap:16px"><div class="card">' + qrHTML() + '</div>' +
+        '<div class="card"><h2>Aus dem Einstieg</h2>' + permHTML() + '</div></div>' +
         '<div style="display:grid;gap:16px"><div class="card" id="auftragLK"></div><div class="gcards" id="gcards"></div></div></div>';
-      $('.side-ein .perm').style.fontSize = '1.25rem';
       return;
     }
-    if (phase === 'besprechung') {
+    if (art === 'besprechung') {
       el.innerHTML = '<div class="bespr"><div style="display:flex;flex-direction:column;gap:10px;min-height:0">' +
-        '<div class="toolbar"><span class="term math" id="bterm"></span><label style="display:flex;align-items:center;gap:8px;font-weight:600">n <input type="range" id="bn" min="1" max="' + N_MAX + '" step="1" value="2"><span id="bnv" class="math"></span></label>' +
-        '<button class="btn" id="bpin">Graph festhalten</button><button class="btn" id="bclear">Löschen</button><button class="btn" id="bvgl">Vergleich: x<sup>n</sup></button></div>' +
+        '<div class="toolbar"><span class="term math" id="bterm"></span><div style="min-width:220px">' + reglerHTML('bn') + '</div>' +
+        '<button class="btn" id="bpin">Graph festhalten</button><button class="btn" id="bclear">Löschen</button><button class="btn" id="bvgl">Vergleich: positiver Exponent</button></div>' +
         graphHTML('bgbox').replace('class="graphbox"', 'class="graphbox" style="flex:1"') + '</div>' +
         '<div class="bespr-side" id="rows"></div></div>';
       plot = plotAnbinden($('#bgbox'), { font: 16 });
-      var bt = function () { $('#bterm').innerHTML = termNeg(plot.n, true); $('#bnv').textContent = 'n = ' + plot.n; $('#bvgl').classList.toggle('on', plot.vergleich); };
+      var bt = function () {
+        $('#bterm').innerHTML = termHTML(plot.n, true);
+        $('.toolbar [data-nv]').textContent = 'n = ' + minus(plot.n);
+        $('#bvgl').classList.toggle('on', plot.vergleich);
+      };
       $('#bn').addEventListener('input', function () { plot.n = +this.value; plot.draw(); bt(); });
       $('#bpin').addEventListener('click', function () { plot.festhalten(); });
       $('#bclear').addEventListener('click', function () { plot.loeschen(); });
       $('#bvgl').addEventListener('click', function () { plot.vergleich = !plot.vergleich; plot.draw(); bt(); });
-      plot.vergleich = !!SP[zeile].vergleich;
-      plot.setPreset(SP[zeile].R);
-      bt();
-      plot._bt = bt;
+      plot.layout(); plot.draw(); bt();
       return;
     }
-    if (phase === 'reserve') {
-      el.innerHTML = '<div class="card" style="font-size:1.4rem"><b>Skizziert den Graphen eurer Funktion ohne Tool in der Mitte eures Placemats.</b><br>Beschriftet ihn mit den Eigenschaften aus eurer Übersicht.</div>' +
+    if (art === 'reserve') {
+      el.innerHTML = '<div class="card" style="font-size:1.4rem"><b>Skizziert den Graphen eurer Funktion in der Mitte eures Placemats.</b><br>Beschriftet ihn mit den Eigenschaften aus eurer Übersicht.</div>' +
         '<div class="res-list" id="reslist"></div>' +
         '<div class="btns"><button class="btn" id="resneu">Funktionen neu verteilen</button><button class="btn" id="ausblick">Ausblick zeigen</button></div>' +
-        '<div class="card hidden" id="ausblicktext" style="font-size:1.6rem;text-align:center">Nächste Stunde: Was bewirkt der Faktor a in <span class="math">f(x) = a · x<sup>−n</sup></span>?</div>';
+        '<div class="card hidden" id="ausblicktext" style="font-size:1.6rem;text-align:center">Nächste Stunde: Was bewirkt der Faktor a in <span class="math">f(x) = a · x<sup>n</sup></span>?</div>';
       $('#resneu').addEventListener('click', function () { aktion({ typ: 'reserveVerteilen' }); });
       $('#ausblick').addEventListener('click', function () { $('#ausblicktext').classList.remove('hidden'); });
     }
@@ -1177,7 +1140,7 @@ function lehrkraftApp() {
   }
 
   function zeilenListe() {
-    var h = '<label style="display:flex;gap:8px;align-items:center;font-size:.95rem"><input type="checkbox" id="ohneEx"' + (z.ohneExperte ? ' checked' : '') + ' style="width:22px;height:22px"> Würfeln ohne die Person, die den Schwerpunkt selbst untersucht hat</label>';
+    var h = '<label style="display:flex;gap:8px;align-items:center;font-size:.95rem"><input type="checkbox" id="ohneEx"' + (z.ohneExperte ? ' checked' : '') + ' style="width:22px;height:22px"> Würfeln ohne die Person, die die Nummer selbst untersucht hat</label>';
     for (var k = 1; k <= 5; k++) {
       var gr = z.zeilen[k], w = z.gewuerfelt[k];
       var opts = '';
@@ -1194,13 +1157,11 @@ function lehrkraftApp() {
       r.addEventListener('click', function (e) {
         if (e.target.closest('select,.dice')) return;
         zeile = +r.getAttribute('data-zeile');
-        plot.vergleich = !!SP[zeile].vergleich; plot.pins = []; plot.setPreset(SP[zeile].R); plot._bt();
         $$('#rows .row').forEach(function (x) { x.classList.toggle('sel', x === r); });
       });
     });
     $$('#rows [data-zg]').forEach(function (s) { s.addEventListener('change', function () { aktion({ typ: 'zeileGruppe', zeile: +s.getAttribute('data-zg'), gruppe: +s.value }); }); });
     $$('#rows [data-w]').forEach(function (b) { b.addEventListener('click', function () { aktion({ typ: 'wuerfeln', zeile: +b.getAttribute('data-w') }); }); });
-    // Würfel-Animation, wenn sich ein Ergebnis geändert hat
     for (var kk = 1; kk <= 5; kk++) {
       if (z.gewuerfelt[kk] && alteWuerfe[kk] !== z.gewuerfelt[kk]) animieren(kk, z.gewuerfelt[kk]);
     }
@@ -1222,8 +1183,8 @@ function lehrkraftApp() {
       var anz = z.lernende.length;
       $('#auftragLK').innerHTML = '<div class="ablauf"><span class="' + (z.phase === 'ich' ? 'on' : '') + '">Ich: allein</span><span class="' + (z.phase === 'du' ? 'on' : '') + '">Du: in der Gruppe</span><span>Besprechung</span></div>' +
         (z.phase === 'ich'
-          ? '<p style="font-size:1.3rem;margin:8px 0 0"><b>1.</b> Wähle im Tool deine Gruppe und eine Nummer. Jede Nummer gibt es pro Gruppe nur einmal.<br><b>2.</b> Arbeite allein und leise. Notiere in deinem Feld auf dem Placemat.</p>'
-          : '<p style="font-size:1.3rem;margin:8px 0 0">Stellt euch reihum eure Beobachtungen vor: Nr. 1 bis Nr. 5.<br>Alle tragen jede Zeile in ihre eigene Übersicht ein.</p>') +
+          ? '<p style="font-size:1.3rem;margin:8px 0 0"><b>1.</b> Scanne den QR-Code. Wähle deine Gruppe und eine Nummer. Jede Nummer gibt es pro Gruppe nur einmal.<br><b>2.</b> Arbeite allein und leise. Notiere in deinem Feld auf dem Placemat.</p>'
+          : '<p style="font-size:1.3rem;margin:8px 0 0">Stellt euch reihum vor: Nr. 1 bis Nr. 5. Wer dran ist, zeigt und erklärt am eigenen Gerät.<br>Alle anderen hören zu und tragen die Zeile in ihre Übersicht ein.</p>') +
         '<p style="color:var(--muted);margin:8px 0 0;font-size:1rem">' + anz + ' Geräte angemeldet</p>';
       gruppenKarten();
     }
