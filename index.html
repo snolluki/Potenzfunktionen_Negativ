@@ -153,12 +153,6 @@ body.lk{font-size:20px;background:#f3f4f6}
 .lk-main{padding:16px;display:grid;gap:16px}
 .cols2{display:grid;gap:16px;grid-template-columns:minmax(280px,380px) 1fr;align-items:start}
 @media (max-width:900px){.cols2{grid-template-columns:1fr}}
-.perm{width:100%;border-collapse:collapse;font-size:1.25rem}
-.perm td{padding:2px 6px}
-.perm td.l{text-align:right;white-space:nowrap}
-.perm td.eq{text-align:center;width:1em}
-.perm td.r{text-align:left;white-space:nowrap}
-.perm-bsp{font-size:1.35rem;margin-top:10px;line-height:2.2}
 .qrbox{text-align:center}
 .qrbox svg{width:min(240px,100%);height:auto;background:#fff;border-radius:12px}
 .qrbox .url{font-size:.95rem;color:var(--muted);word-break:break-all}
@@ -218,60 +212,60 @@ body.lk{font-size:20px;background:#f3f4f6}
 /* ================================================================== */
 
 var N_MIN = -9, N_MAX = -1, N_START = -2;
-var RECHNUNG = 'Erkläre deine Beobachtung rechnerisch, z. B. mit <span class="math">x<sup>−2</sup> = <span class="frac"><span>1</span><span>x<sup>2</sup></span></span></span>.';
+var RECHNUNG = 'Begründe deine Beobachtung mit einer Rechnung. Nutze dafür zum Beispiel <span class="math">x<sup>−2</sup> = <span class="frac"><span>1</span><span>x<sup>2</sup></span></span></span>.';
 var SP = {
   1: {
     kurz: 'Nahe 0',
-    frage: 'Was passiert mit dem Graphen, wenn x ganz nah an 0 kommt? Was passiert bei x = 0?',
+    frage: 'Wie verändern sich die Funktionswerte, wenn x immer näher an 0 kommt?',
     zusatz: RECHNUNG,
-    tipp: 'Tipp: Mit + kannst du nah an x = 0 heranzoomen.',
+    tipp: 'Tipp: Schau dir auch die Stelle x = 0 genau an. Zoome mit + heran und verschiebe das Koordinatensystem mit dem Finger.',
     hilfen: [
-      'Schau in die Wertetabelle: Was passiert mit f(x), wenn x von 1 über 0,5 bis 0,1 immer näher an 0 kommt? Und links von 0, also bei −1, −0,5 und −0,1?',
+      'Schau in die Wertetabelle: Wie verändern sich die Funktionswerte, wenn x von 1 über 0,5 bis 0,1 immer näher an 0 kommt? Und auf der linken Seite, also bei −1, −0,5 und −0,1?',
       'Rechne selbst: <span class="math">0,1<sup>−2</sup> = 1/0,1² = 1/0,01 = ?</span> Und was wäre <span class="math">0<sup>−2</sup> = 1/0²</span>? Kann man durch 0 teilen?'
     ],
-    bausteine: ['Je näher x an 0 kommt, desto … wird …', 'Bei x = 0 …', 'Der Graph nähert sich der … an.']
+    bausteine: ['Je näher x an 0 kommt, desto … werden die Funktionswerte.', 'Bei x = 0 …', 'Der Graph nähert sich der … an.']
   },
   2: {
-    kurz: 'Sehr große x',
-    frage: 'Was passiert mit dem Graphen, wenn x sehr groß wird – positiv und negativ?',
+    kurz: 'Sehr große und sehr kleine x',
+    frage: 'Wie verändern sich die Funktionswerte, wenn x sehr groß oder sehr klein wird?',
     zusatz: RECHNUNG,
-    tipp: 'Tipp: Mit − kannst du herauszoomen, um sehr große x zu sehen.',
+    tipp: 'Tipp: „Sehr klein“ meint zum Beispiel x = −100, nicht x nahe 0. Zoome mit − heraus.',
     hilfen: [
-      '„Sehr groß – positiv und negativ“ heißt: x = 10 oder x = 100, aber auch x = −10 oder x = −100. Schau in die Wertetabelle. Zoome heraus und tippe auf den Graphen bei x = 100 und x = −100. Was passiert mit f(x)?',
-      'Rechne selbst: <span class="math">100<sup>−2</sup> = 1/100² = ?</span> Wird f(x) irgendwann genau 0? Zoome nah an die x-Achse heran: Berührt der Graph sie?'
+      'Sehr groß heißt zum Beispiel x = 10 oder x = 100, sehr klein heißt zum Beispiel x = −10 oder x = −100. Schau in die Wertetabelle. Zoome heraus und tippe auf den Graphen bei x = 100 und x = −100.',
+      'Rechne selbst: <span class="math">100<sup>−2</sup> = 1/100² = ?</span> Wird der Funktionswert irgendwann genau 0? Zoome nah an die x-Achse heran: Berührt der Graph sie?'
     ],
-    bausteine: ['Je größer |x| wird, desto näher kommt f(x) der Zahl …', 'f(x) wird aber nie …', 'Der Graph nähert sich der … an.']
+    bausteine: ['Je weiter x von 0 entfernt ist, desto näher kommen die Funktionswerte der Zahl …', 'Die Funktionswerte werden aber nie …', 'Der Graph nähert sich der … an.']
   },
   3: {
-    kurz: 'Die beiden Teile',
-    frage: 'Wie liegen die beiden Teile des Graphen zueinander?',
+    kurz: 'Symmetrie',
+    frage: 'Welche Symmetrie hat der Graph?',
     zusatz: 'Begründe deine Beobachtung mit der Wertetabelle.',
-    tipp: null,
+    tipp: 'Tipp: Die Wertetabelle zeigt x und −x nebeneinander.',
     hilfen: [
-      'Vergleiche in der Tabelle f(2) mit f(−2) und f(0,5) mit f(−0,5). Was fällt dir auf? Probiere gerade und ungerade n aus.',
-      'Erinnere dich an die Potenzfunktionen mit positiven Exponenten: Klappe den Graphen in Gedanken an der y-Achse um. Oder drehe ihn einmal halb um den Ursprung (0 | 0). Was passt bei welchem n?'
+      'Vergleiche in der Wertetabelle f(2) mit f(−2) und f(0,5) mit f(−0,5). Was fällt dir auf? Probiere gerade und ungerade n aus.',
+      'Bei den Potenzfunktionen mit positiven Exponenten habt ihr zwei Arten von Symmetrie kennengelernt: achsensymmetrisch zur y-Achse und punktsymmetrisch zum Ursprung. Klappe den Graphen in Gedanken an der y-Achse um. Oder drehe ihn einmal halb um den Ursprung (0 | 0). Was passt bei welchem n?'
     ],
-    bausteine: ['Der Graph ist achsensymmetrisch zur …', 'Der Graph ist punktsymmetrisch zum …', 'In der Tabelle sieht man: f(−2) = … und f(2) = …, also …']
+    bausteine: ['Der Graph ist achsensymmetrisch zur …', 'Der Graph ist punktsymmetrisch zum …', 'In der Wertetabelle sieht man: f(−2) = … und f(2) = …, also …']
   },
   4: {
-    kurz: 'Wo verläuft der Graph?',
-    frage: 'Wo im Koordinatensystem verläuft der Graph? Gibt es Punkte, durch die mehrere Graphen gehen?',
+    kurz: 'Verlauf und gemeinsame Punkte',
+    frage: 'In welchen Bereichen verlaufen die Graphen, und welche Punkte haben sie gemeinsam?',
     zusatz: 'Begründe deine Beobachtung mit der Wertetabelle.',
-    tipp: 'Tipp: Mit „Graph festhalten“ siehst du mehrere Graphen gleichzeitig.',
+    tipp: 'Tipp: Halte mit „Graph festhalten“ mehrere Graphen fest, dann siehst du sie gleichzeitig.',
     hilfen: [
-      'Halte mehrere Graphen fest, z. B. für n = −1, −2, −3 und −4. Wo liegen sie: oberhalb oder unterhalb der x-Achse? Links oder rechts der y-Achse?',
-      'Schau in der Tabelle auf x = 1 und x = −1. Welche Funktionswerte haben die Graphen dort? Rechne: <span class="math">1<sup>−3</sup> = 1/1³ = ?</span> und <span class="math">(−1)<sup>−3</sup> = 1/(−1)³ = ?</span>'
+      'Halte die Graphen für n = −1, −2, −3 und −4 fest. Verlaufen sie oberhalb oder unterhalb der x-Achse? Schau links und rechts von der y-Achse getrennt.',
+      'Schau in der Wertetabelle auf x = 1 und x = −1. Welche Funktionswerte haben die Graphen dort? Rechne: <span class="math">1<sup>−3</sup> = 1/1³ = ?</span> und <span class="math">(−1)<sup>−3</sup> = 1/(−1)³ = ?</span>'
     ],
-    bausteine: ['Für gerades n sind alle Funktionswerte …', 'Für ungerades n sind die Funktionswerte links von 0 … und rechts von 0 …', 'Alle Graphen gehen durch den Punkt (… | …).']
+    bausteine: ['Für gerades n verläuft der Graph …', 'Für ungerades n verläuft der Graph links von der y-Achse … und rechts von der y-Achse …', 'Alle Graphen gehen durch den Punkt (… | …).']
   },
   5: {
     kurz: 'Vergleich mit positiven Exponenten',
-    frage: 'Was ist anders als bei Potenzfunktionen mit positiven Exponenten? Was bleibt gleich?',
+    frage: 'Was ist gleich und was ist anders als bei den Graphen mit positiven Exponenten?',
     zusatz: null,
     tipp: 'Tipp: Schalte „Vergleich: positiver Exponent“ ein.',
     hilfen: [
-      'Mit „Vergleich“ siehst du grau den Graphen mit positivem Exponenten, z. B. bei n = −2 den Graphen von <span class="math">g(x) = x<sup>2</sup></span>. Vergleiche die beiden Graphen. Probiere dann n = −3.',
-      'Achte auf: Wie viele Teile hat der Graph? Gibt es den Punkt (0 | 0)? Ist der Graph symmetrisch? Welche Punkte gibt es bei x = 1 und x = −1?'
+      'Mit „Vergleich“ siehst du grau den Graphen mit positivem Exponenten, zum Beispiel bei n = −2 den Graphen von <span class="math">g(x) = x<sup>2</sup></span>. Vergleiche die beiden Graphen. Probiere dann n = −3.',
+      'Achte auf: Aus wie vielen Teilen besteht der Graph? Geht er durch den Punkt (0 | 0)? Ist er symmetrisch? Welche Punkte gibt es bei x = 1 und x = −1?'
     ],
     bausteine: ['Gleich bleibt: …', 'Anders ist: …', 'Bei positiven Exponenten …, bei negativen Exponenten dagegen …']
   }
@@ -369,28 +363,36 @@ function Plot(canvas, legend, opts) {
   var P = this;
   opts = opts || {};
   P.cv = canvas; P.ctx = canvas.getContext('2d'); P.legend = legend;
-  P.n = N_START; P.R = R_START; P.zoom = 1; P.pins = []; P.probeX = null; P.vergleich = false;
+  P.n = N_START; P.R = R_START; P.zoom = 1; P.ox = 0; P.oy = 0; P.pins = []; P.probeX = null; P.vergleich = false;
   P.font = opts.font || 13;
   P.W = 0; P.H = 0; P.ppu = 40; P.cx = 0; P.cy = 0;
-  var touches = {}, pinch = null;
+  var touches = {}, pinch = null, zug = null;
   function anzahl() { return Object.keys(touches).length; }
   function abstand() { var p = Object.keys(touches).map(function (k) { return touches[k]; }); return Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y); }
   canvas.addEventListener('pointerdown', function (e) {
     try { canvas.setPointerCapture(e.pointerId); } catch (er) {}
     touches[e.pointerId] = { x: e.clientX, y: e.clientY };
-    if (anzahl() === 2) pinch = { d: abstand(), z: P.zoom };
-    else if (!pinch) P.probe(e);
-    var hint = canvas.parentElement.querySelector('.ghint');
-    if (hint) hint.style.display = 'none';
+    if (anzahl() === 2) { pinch = { d: abstand(), z: P.zoom }; zug = null; }
+    else if (!pinch) zug = { x: e.clientX, y: e.clientY, ox: P.ox, oy: P.oy, bewegt: false };
   });
   canvas.addEventListener('pointermove', function (e) {
     if (touches[e.pointerId]) touches[e.pointerId] = { x: e.clientX, y: e.clientY };
     if (pinch && anzahl() === 2) { P.setZoom(pinch.z * abstand() / pinch.d); return; }
-    if (!pinch && e.buttons) P.probe(e);
+    if (zug && touches[e.pointerId]) {
+      var dx = e.clientX - zug.x, dy = e.clientY - zug.y;
+      if (!zug.bewegt && Math.hypot(dx, dy) > 6) zug.bewegt = true;
+      if (zug.bewegt) { P.ox = zug.ox - dx / P.ppu; P.oy = zug.oy + dy / P.ppu; P.layout(); P.draw(); }
+    }
   });
-  function los(e) { delete touches[e.pointerId]; if (anzahl() === 0) pinch = null; }
+  function los(e) {
+    // kurz getippt (nicht gezogen): Punkt ablesen
+    if (zug && !zug.bewegt && !pinch && touches[e.pointerId]) P.probe(e);
+    if (zug || pinch) { var hint = canvas.parentElement.querySelector('.ghint'); if (hint) hint.style.display = 'none'; }
+    delete touches[e.pointerId];
+    if (anzahl() === 0) { pinch = null; zug = null; }
+  }
   canvas.addEventListener('pointerup', los);
-  canvas.addEventListener('pointercancel', los);
+  canvas.addEventListener('pointercancel', function (e) { delete touches[e.pointerId]; if (anzahl() === 0) { pinch = null; zug = null; } });
   canvas.addEventListener('wheel', function (e) { e.preventDefault(); P.setZoom(P.zoom * (e.deltaY < 0 ? 1.15 : 1 / 1.15)); }, { passive: false });
   if (window.ResizeObserver) new ResizeObserver(function () { P.layout(); P.draw(); }).observe(canvas.parentElement);
   window.addEventListener('resize', function () { P.layout(); P.draw(); });
@@ -406,8 +408,9 @@ Plot.prototype.layout = function () {
   this.cv.width = Math.round(this.W * dpr); this.cv.height = Math.round(this.H * dpr);
   this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   this.ppu = Math.min(this.W, this.H) / 2 / this.R * this.zoom;
-  this.cx = this.W / 2; this.cy = this.H / 2;
+  this.cx = this.W / 2 - this.ox * this.ppu; this.cy = this.H / 2 + this.oy * this.ppu;
 };
+Plot.prototype.zurueck = function () { this.zoom = 1; this.ox = 0; this.oy = 0; this.probeX = null; this.layout(); this.draw(); };
 Plot.prototype.X = function (x) { return this.cx + x * this.ppu; };
 Plot.prototype.Y = function (y) { return this.cy - y * this.ppu; };
 Plot.prototype.schritt = function () {
@@ -434,10 +437,10 @@ Plot.prototype.kurve = function (fn, farbe, breite, strich, getrennt) {
     c.stroke();
   }
   if (getrennt) {
-    stueck(0, this.cx - 0.25);
-    stueck(this.cx + 0.25, W);
+    if (this.cx > 0) stueck(0, Math.min(W, this.cx - 0.25));
+    if (this.cx < W) stueck(Math.max(0, this.cx + 0.25), W);
     // letzte Stücke direkt an der y-Achse, damit die Annäherung bis zum Bildrand sichtbar ist
-    [-1, 1].forEach(function (s) {
+    if (this.cx > -20 && this.cx < W + 20) [-1, 1].forEach(function (s) {
       var x1 = s * 1.5 / P.ppu, x2 = s * 0.25 / P.ppu;
       var y1 = P.Y(fn(x1)), y2 = P.Y(fn(x2));
       if (!isFinite(y1) || !isFinite(y2)) return;
@@ -450,33 +453,42 @@ Plot.prototype.draw = function () {
   var c = this.ctx, P = this, W = this.W, H = this.H;
   if (!W || !H) return;
   c.clearRect(0, 0, W, H);
-  var xr = W / 2 / this.ppu, yr = H / 2 / this.ppu, st = this.schritt(), i, j;
+  var st = this.schritt(), i, j;
+  var xa = -this.cx / this.ppu, xb = (W - this.cx) / this.ppu, ya = (this.cy - H) / this.ppu, yb = this.cy / this.ppu;
   c.lineWidth = 1; c.strokeStyle = css('--grid'); c.beginPath();
-  for (i = Math.ceil(-xr / st); i <= Math.floor(xr / st); i++) { c.moveTo(this.X(i * st), 0); c.lineTo(this.X(i * st), H); }
-  for (j = Math.ceil(-yr / st); j <= Math.floor(yr / st); j++) { c.moveTo(0, this.Y(j * st)); c.lineTo(W, this.Y(j * st)); }
+  for (i = Math.ceil(xa / st); i <= Math.floor(xb / st); i++) { c.moveTo(this.X(i * st), 0); c.lineTo(this.X(i * st), H); }
+  for (j = Math.ceil(ya / st); j <= Math.floor(yb / st); j++) { c.moveTo(0, this.Y(j * st)); c.lineTo(W, this.Y(j * st)); }
   c.stroke();
   var ax = css('--axis');
   c.strokeStyle = ax; c.fillStyle = ax; c.lineWidth = 1.5;
-  c.beginPath(); c.moveTo(0, this.cy); c.lineTo(W, this.cy); c.moveTo(this.cx, 0); c.lineTo(this.cx, H); c.stroke();
-  c.beginPath(); c.moveTo(W, this.cy); c.lineTo(W - 10, this.cy - 5); c.lineTo(W - 10, this.cy + 5); c.fill();
-  c.beginPath(); c.moveTo(this.cx, 0); c.lineTo(this.cx - 5, 10); c.lineTo(this.cx + 5, 10); c.fill();
+  if (this.cy >= 0 && this.cy <= H) {
+    c.beginPath(); c.moveTo(0, this.cy); c.lineTo(W, this.cy); c.stroke();
+    c.beginPath(); c.moveTo(W, this.cy); c.lineTo(W - 10, this.cy - 5); c.lineTo(W - 10, this.cy + 5); c.fill();
+  }
+  if (this.cx >= 0 && this.cx <= W) {
+    c.beginPath(); c.moveTo(this.cx, 0); c.lineTo(this.cx, H); c.stroke();
+    c.beginPath(); c.moveTo(this.cx, 0); c.lineTo(this.cx - 5, 10); c.lineTo(this.cx + 5, 10); c.fill();
+  }
+  // Beschriftung bleibt am Rand sichtbar, wenn eine Achse aus dem Bild geschoben wurde
+  var ly = Math.max(4, Math.min(H - this.font - 8, this.cy + 6));
+  var lx = Math.max(this.font * 2.6, Math.min(W - 6, this.cx - 7));
   c.font = this.font + 'px system-ui, sans-serif';
   c.textAlign = 'center'; c.textBaseline = 'top';
-  for (i = Math.ceil(-xr / st); i <= Math.floor(xr / st); i++) {
+  for (i = Math.ceil(xa / st); i <= Math.floor(xb / st); i++) {
     if (i === 0) continue;
-    c.beginPath(); c.moveTo(this.X(i * st), this.cy - 4); c.lineTo(this.X(i * st), this.cy + 4); c.stroke();
-    c.fillText(de(i * st, 3), this.X(i * st), this.cy + 6);
+    if (this.cy >= 0 && this.cy <= H) { c.beginPath(); c.moveTo(this.X(i * st), this.cy - 4); c.lineTo(this.X(i * st), this.cy + 4); c.stroke(); }
+    c.fillText(de(i * st, 3), this.X(i * st), ly);
   }
   c.textAlign = 'right'; c.textBaseline = 'middle';
-  for (j = Math.ceil(-yr / st); j <= Math.floor(yr / st); j++) {
+  for (j = Math.ceil(ya / st); j <= Math.floor(yb / st); j++) {
     if (j === 0) continue;
-    c.beginPath(); c.moveTo(this.cx - 4, this.Y(j * st)); c.lineTo(this.cx + 4, this.Y(j * st)); c.stroke();
-    c.fillText(de(j * st, 3), this.cx - 7, this.Y(j * st));
+    if (this.cx >= 0 && this.cx <= W) { c.beginPath(); c.moveTo(this.cx - 4, this.Y(j * st)); c.lineTo(this.cx + 4, this.Y(j * st)); c.stroke(); }
+    c.fillText(de(j * st, 3), lx, this.Y(j * st));
   }
   c.textAlign = 'left'; c.textBaseline = 'alphabetic';
   c.font = 'italic ' + (this.font + 2) + 'px serif';
-  c.fillText('x', W - 16, this.cy - 10);
-  c.fillText('y', this.cx + 10, 16);
+  if (this.cy >= 0 && this.cy <= H) c.fillText('x', W - 16, this.cy - 10);
+  if (this.cx >= 0 && this.cx <= W) c.fillText('y', this.cx + 10, 16);
 
   var n = this.n;
   if (this.vergleich) this.kurve(function (x) { return g(n, x); }, css('--ref'), 2.5, [4, 6], false);
@@ -488,13 +500,13 @@ Plot.prototype.draw = function () {
     c.font = 'bold ' + (this.font + 3) + 'px system-ui, sans-serif';
     if (px === 0) {
       label = 'x = 0: kein Funktionswert';
-      sy = this.cy;
+      sy = Math.max(30, Math.min(H - 30, this.cy));
       c.strokeStyle = css('--accent'); c.lineWidth = 2; c.setLineDash([3, 4]);
       c.beginPath(); c.arc(sx, sy, 8, 0, 2 * Math.PI); c.stroke(); c.setLineDash([]);
     } else {
       var py = f(n, px); sy = this.Y(py);
       label = '(' + fmtX(px) + ' | ' + fmtPunkt(py) + ')';
-      if (sy < -20 || sy > H + 20) {
+      if (sy < -20 || sy > H + 20 || sx < -20 || sx > W + 20) {
         c.fillStyle = css('--muted'); c.font = (this.font + 1) + 'px system-ui, sans-serif';
         c.fillText('Punkt ' + label + ' liegt außerhalb des Bildes', 12, H - 30);
         this.legende();
@@ -503,7 +515,11 @@ Plot.prototype.draw = function () {
       c.fillStyle = css('--accent'); c.beginPath(); c.arc(sx, sy, 7, 0, 2 * Math.PI); c.fill();
     }
     var w = c.measureText(label).width + 14, h = this.font + 13;
-    var lx = Math.min(Math.max(sx + 12, 4), W - w - 4), ly = Math.min(Math.max(sy - h - 8, 4), H - h - 4);
+    // Beschriftung nicht unter die Zoom-Knöpfe rechts legen; notfalls links vom Punkt
+    var rechtsFrei = W - 60;
+    var lx = sx + 12 + w <= rechtsFrei ? sx + 12 : sx - 12 - w;
+    lx = Math.max(4, Math.min(lx, rechtsFrei - w));
+    var ly = Math.min(Math.max(sy - h - 8, 4), H - h - 4);
     c.fillStyle = css('--panel'); c.strokeStyle = css('--accent'); c.lineWidth = 1.5;
     c.beginPath(); c.rect(lx, ly, w, h); c.fill(); c.stroke();
     c.fillStyle = css('--text'); c.textBaseline = 'middle';
@@ -538,8 +554,8 @@ Plot.prototype.loeschen = function () { this.pins = []; this.probeX = null; this
 
 function graphHTML(id) {
   return '<div class="graphbox" id="' + id + '"><canvas></canvas><div class="legend"></div>' +
-    '<div class="zoom"><button type="button" data-z="in" aria-label="Hineinzoomen">+</button><button type="button" data-z="out" aria-label="Herauszoomen">−</button><button type="button" data-z="reset" class="small" aria-label="Startansicht">1:1</button></div>' +
-    '<div class="ghint">Tippe auf den Graphen, um einen Punkt abzulesen. Zoomen: + / − oder mit zwei Fingern.</div></div>';
+    '<div class="zoom"><button type="button" data-z="in" aria-label="Hineinzoomen">+</button><button type="button" data-z="out" aria-label="Herauszoomen">−</button><button type="button" data-z="reset" class="small" aria-label="Zurück zur Startansicht">1:1</button></div>' +
+    '<div class="ghint">Tippen: Punkt ablesen · Ziehen: verschieben · + / − oder zwei Finger: zoomen · 1:1: zurück</div></div>';
 }
 function plotAnbinden(box, opts) {
   var p = new Plot($('canvas', box), $('.legend', box), opts);
@@ -548,7 +564,7 @@ function plotAnbinden(box, opts) {
       var z = b.getAttribute('data-z');
       if (z === 'in') p.setZoom(p.zoom * 1.5);
       else if (z === 'out') p.setZoom(p.zoom / 1.5);
-      else { p.zoom = 1; p.probeX = null; p.layout(); p.draw(); }
+      else p.zurueck();
     });
   });
   return p;
@@ -651,11 +667,11 @@ function schuelerApp() {
     var s = SP[sp];
     var h = '<div class="q"><span class="nrbig">' + sp + '</span>' + esc(s.frage) + '</div>';
     if (voll) {
-      h += '<ul><li>Verändere n. Hängt deine Beobachtung von n ab?</li>' +
+      h += '<ul><li>Verändere n: Hängt deine Beobachtung von n ab?</li>' +
         (s.zusatz ? '<li>' + s.zusatz + '</li>' : '') +
         '<li>Was fällt dir außerdem auf?</li></ul>' +
         (s.tipp ? '<div class="tipp">💡 ' + esc(s.tipp) + '</div>' : '') +
-        (ohneNotiz ? '' : '<div class="note">✎ Notiere alles in deinem Feld auf dem Placemat.</div>');
+        (ohneNotiz ? '' : '<div class="note">✎ Notiere deine Beobachtungen in deinem Feld auf dem Placemat.</div>');
     }
     return h;
   }
@@ -790,24 +806,24 @@ function schuelerApp() {
   function duZeigen(v) {
     var ich = v.ich, k = v.du.schritt;
     if (k > 5) {
-      return screen('<div class="big-msg"><div class="icon">✅</div><h2>Alle Zeilen sind vorgestellt</h2>' + punkte(6) +
-        '<p>Prüft gemeinsam: Steht in jeder Zeile eurer Übersicht etwas? Einigt euch auf Formulierungen, die jede und jeder von euch vorstellen kann.</p></div>');
+      return screen('<div class="big-msg"><div class="icon">✅</div><h2>Alle Beobachtungen sind vorgestellt</h2>' + punkte(6) +
+        '<p>Prüft gemeinsam, ob in jeder Zeile eurer Übersicht etwas steht. Klärt offene Fragen, sodass jede und jeder von euch jede Zeile vorstellen kann.</p></div>');
     }
     if (ich.sp !== k && v.du.experte) {
       // Zuhören: das Tool ist gesperrt
-      return screen('<div class="big-msg"><div class="icon">👂</div><h2>Nr. ' + k + ' erklärt</h2>' + punkte(k) +
+      return screen('<div class="big-msg"><div class="icon">👂</div><h2>Nr. ' + k + ' stellt vor</h2>' + punkte(k) +
         '<p><b>' + esc(SP[k].frage) + '</b></p>' +
-        '<p>Hör zu und trage Zeile ' + k + ' in deine Übersicht ein. Frag nach, wenn du etwas nicht verstehst.</p></div>');
+        '<p>Hör zu und notiere die Beobachtungen in Zeile ' + k + ' deiner Übersicht. Frag nach, wenn du etwas nicht verstehst.</p></div>');
     }
     var weiter = k < 5 ? 'weiter zu Nr. ' + (k + 1) : 'Runde beenden', h;
     if (ich.sp === k) {
       h = '<div class="du-box me"><h3>Du bist dran: Nr. ' + k + '</h3>' + punkte(k) +
-        '<p>Zeige deiner Gruppe deinen Graphen und erkläre, was du herausgefunden hast. Die anderen tragen es in Zeile ' + k + ' ihrer Übersicht ein.</p>' +
-        '<button class="btn ok" id="weiter">Fertig erklärt – ' + weiter + '</button></div>' + auftragHTML(k, false);
+        '<p>Stelle deiner Gruppe deine Beobachtungen vor und zeige sie dabei am Graphen. Die anderen notieren sie in Zeile ' + k + ' ihrer Übersicht.</p>' +
+        '<button class="btn ok" id="weiter">Fertig – ' + weiter + '</button></div>' + auftragHTML(k, false);
       hilfenZeigen(null);
     } else {
       h = '<div class="du-box"><h3>Nr. ' + k + ': gemeinsam untersuchen</h3>' + punkte(k) +
-        '<p>Diese Nummer hat in eurer Gruppe niemand untersucht. Untersucht sie jetzt gemeinsam und tragt Zeile ' + k + ' in eure Übersicht ein.</p>' +
+        '<p>Diese Leitfrage hat in eurer Gruppe niemand bearbeitet. Untersucht sie jetzt gemeinsam und notiert eure Beobachtungen in Zeile ' + k + ' eurer Übersicht.</p>' +
         '<button class="btn" id="weiter">Fertig – ' + weiter + '</button></div>' + auftragHTML(k, true, true);
       hilfenZeigen(k);
     }
@@ -843,7 +859,7 @@ function schuelerApp() {
     for (var k = 1; k <= 5; k++) {
       var weg = belegt.indexOf(k) >= 0, gesperrt = k === 5 && !erst4 && !weg;
       h2 += '<button class="sp-btn" data-sp="' + k + '"' + (weg || gesperrt ? ' disabled' : '') + '><span class="nr">' + k + '</span><span><b>' + esc(SP[k].kurz) + '</b><span class="q">' + esc(SP[k].frage) + '</span>' +
-        (weg ? '<span class="tag">schon vergeben</span>' : gesperrt ? '<span class="tag">nur in Fünfergruppen – erst wenn 1 bis 4 vergeben sind</span>' : '') + '</span></button>';
+        (weg ? '<span class="tag">schon vergeben</span>' : gesperrt ? '<span class="tag">nur in Fünfergruppen: wählbar, sobald 1 bis 4 vergeben sind</span>' : '') + '</span></button>';
     }
     h2 += '</div></div>';
     screen(h2);
@@ -1050,29 +1066,12 @@ function lehrkraftApp() {
     }
     return '<div class="qrbox">' + svg + '<div class="code">' + esc(z.code) + '</div><div class="url">' + esc(url) + '</div></div>';
   }
-  function permHTML() {
-    var zeilen = [
-      ['2<sup>3</sup>', '8'], ['2<sup>2</sup>', '4'], ['2<sup>1</sup>', '2'], ['2<sup>0</sup>', '1'],
-      ['2<sup>−1</sup>', '<span class="frac"><span>1</span><span>2</span></span> = <span class="frac"><span>1</span><span>2<sup>1</sup></span></span>'],
-      ['2<sup>−2</sup>', '<span class="frac"><span>1</span><span>4</span></span> = <span class="frac"><span>1</span><span>2<sup>2</sup></span></span>'],
-      ['2<sup>−3</sup>', '<span class="frac"><span>1</span><span>8</span></span> = <span class="frac"><span>1</span><span>2<sup>3</sup></span></span>']
-    ];
-    var h = '<table class="perm math">';
-    zeilen.forEach(function (r) { h += '<tr><td class="l">' + r[0] + '</td><td class="eq">=</td><td class="r">' + r[1] + '</td></tr>'; });
-    h += '</table><div class="perm-bsp math">' +
-      'x<sup>−1</sup> = <span class="frac"><span>1</span><span>x</span></span>, &nbsp;' +
-      'x<sup>−2</sup> = <span class="frac"><span>1</span><span>x<sup>2</sup></span></span>, &nbsp;' +
-      'x<sup>−3</sup> = <span class="frac"><span>1</span><span>x<sup>3</sup></span></span>, …</div>';
-    return h;
-  }
-
   function bauen(art) {
     var el = $('#inhalt');
     plot = null;
     if (art === 'ichdu') {
       el.innerHTML = '<div class="cols2">' +
-        '<div style="display:grid;gap:16px"><div class="card">' + qrHTML() + '</div>' +
-        '<div class="card"><h2>Aus dem Einstieg</h2>' + permHTML() + '</div></div>' +
+        '<div class="card">' + qrHTML() + '</div>' +
         '<div style="display:grid;gap:16px"><div class="card" id="auftragLK"></div><div class="gcards" id="gcards"></div></div></div>';
       return;
     }
@@ -1110,7 +1109,7 @@ function lehrkraftApp() {
     for (var gi = 1; gi <= z.gruppen; gi++) {
       var mit = z.lernende.filter(function (l) { return l.gruppe === gi; });
       var schritt = z.duSchritt[gi] || 1;
-      h += '<div class="gcard"><h3><span>Gruppe ' + gi + '</span><span style="font-size:.9rem;color:var(--muted)">' + mit.length + ' Geräte</span></h3><div class="slots">';
+      h += '<div class="gcard"><h3><span>Gruppe ' + gi + '</span><span style="font-size:.9rem;color:var(--muted)">' + mit.length + (mit.length === 1 ? ' Gerät' : ' Geräte') + '</span></h3><div class="slots">';
       for (var k = 1; k <= 5; k++) {
         var l = mit.filter(function (x) { return x.sp === k; })[0];
         var cur = z.phase === 'du' && schritt === k;
@@ -1183,9 +1182,9 @@ function lehrkraftApp() {
       var anz = z.lernende.length;
       $('#auftragLK').innerHTML = '<div class="ablauf"><span class="' + (z.phase === 'ich' ? 'on' : '') + '">Ich: allein</span><span class="' + (z.phase === 'du' ? 'on' : '') + '">Du: in der Gruppe</span><span>Besprechung</span></div>' +
         (z.phase === 'ich'
-          ? '<p style="font-size:1.3rem;margin:8px 0 0"><b>1.</b> Scanne den QR-Code. Wähle deine Gruppe und eine Nummer. Jede Nummer gibt es pro Gruppe nur einmal.<br><b>2.</b> Arbeite allein und leise. Notiere in deinem Feld auf dem Placemat.</p>'
-          : '<p style="font-size:1.3rem;margin:8px 0 0">Stellt euch reihum vor: Nr. 1 bis Nr. 5. Wer dran ist, zeigt und erklärt am eigenen Gerät.<br>Alle anderen hören zu und tragen die Zeile in ihre Übersicht ein.</p>') +
-        '<p style="color:var(--muted);margin:8px 0 0;font-size:1rem">' + anz + ' Geräte angemeldet</p>';
+          ? '<p style="font-size:1.3rem;margin:8px 0 0"><b>1.</b> Scanne den QR-Code. Wähle deine Gruppe und eine Nummer. Jede Nummer gibt es pro Gruppe nur einmal.<br><b>2.</b> Arbeite allein und leise. Notiere deine Beobachtungen in deinem Feld auf dem Placemat.</p>'
+          : '<p style="font-size:1.3rem;margin:8px 0 0">Nacheinander stellen Nr. 1 bis Nr. 5 ihre Beobachtungen vor und zeigen sie am eigenen Gerät.<br>Alle anderen hören zu und notieren die Beobachtungen in der passenden Zeile ihrer Übersicht.</p>') +
+        '<p style="color:var(--muted);margin:8px 0 0;font-size:1rem">' + anz + (anz === 1 ? ' Gerät' : ' Geräte') + ' angemeldet</p>';
       gruppenKarten();
     }
     if (z.phase === 'besprechung' && plot) zeilenListe();
