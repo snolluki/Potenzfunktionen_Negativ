@@ -7,6 +7,9 @@
  * Lehrkraft:    /lehrkraft   (Smartboard)
  * Frei:         /?frei       (ohne Anmeldung, z. B. zu Hause)
  *
+ * Phasen: Ich (Einzelarbeit) – Du (Vorstellen in der Gruppe) – Zeichnung (Graph der Gruppenfunktion
+ * in der Mitte des Placemats). Die anschließende Galerie läuft ohne Geräte.
+ *
  * Umgebungsvariable (bei Render unter "Environment" setzen):
  *   LEHRER_PASSWORT   Passwort zum Anlegen einer Stunde (dringend empfohlen)
  *
@@ -27,7 +30,7 @@ const LEBENSDAUER_MS = 12 * 60 * 60 * 1000;
 const MAX_GRUPPEN = 8;
 const MAX_PRO_GRUPPE = 5;
 const SCHWERPUNKTE = 5;
-const PHASEN = ['ich', 'du', 'besprechung', 'reserve'];
+const PHASEN = ['ich', 'du', 'zeichnung'];
 
 const app = express();
 const server = http.createServer(app);
@@ -80,10 +83,7 @@ function neueStunde(gruppen) {
     pause: false,
     lernende: {},          // id -> { id, gruppe, sp, seit }
     duSchritt: {},         // gruppe -> 1..6 (6 = fertig)
-    zeilen: {},            // zeile (1..5) -> gruppe
-    gewuerfelt: {},        // zeile -> Schwerpunkt-Nr. der vorstellenden Person
-    ohneExperte: false,    // beim Würfeln die Person ausschließen, die die Zeile selbst untersucht hat
-    reserve: {},           // gruppe -> Exponent n (Funktion x^-n)
+    funktion: {},          // gruppe -> Betrag des Exponenten (Funktion x^-k) für die Zeichnung
     updatedAt: Date.now(),
   };
 }
@@ -125,10 +125,7 @@ function lehrkraftAnsicht(s) {
       .sort((a, b) => a.gruppe - b.gruppe || a.sp - b.sp)
       .map(l => ({ id: l.id, gruppe: l.gruppe, sp: l.sp, online: istOnline(l.id) })),
     duSchritt: s.duSchritt,
-    zeilen: s.zeilen,
-    gewuerfelt: s.gewuerfelt,
-    ohneExperte: s.ohneExperte,
-    reserve: s.reserve,
+    funktion: s.funktion,
   };
 }
 
@@ -141,7 +138,7 @@ function schuelerAnsicht(s, id) {
     v.ich = { gruppe: ich.gruppe, sp: ich.sp };
     const schritt = s.duSchritt[ich.gruppe] || 1;
     v.du = { schritt, experte: vergeben[ich.gruppe].includes(schritt) };
-    v.reserve = s.reserve[ich.gruppe] || null;
+    v.funktion = s.funktion[ich.gruppe] || null;
   }
   return v;
 }
@@ -157,11 +154,10 @@ async function verteilen(s) {
 /* Lehrkraft-Aktionen                                                  */
 /* ------------------------------------------------------------------ */
 
-function zeilenZuteilen(s) {
-  const gr = mischen(Array.from({ length: s.gruppen }, (_, i) => i + 1));
-  s.zeilen = {};
-  for (let z = 1; z <= SCHWERPUNKTE; z++) s.zeilen[z] = gr[(z - 1) % gr.length];
-  s.gewuerfelt = {};
+function funktionenVerteilen(s) {
+  const exps = mischen([5, 6, 7, 8, 9]);
+  s.funktion = {};
+  for (let g = 1; g <= s.gruppen; g++) s.funktion[g] = exps[(g - 1) % exps.length];
 }
 
 function aktion(s, d) {
@@ -173,8 +169,7 @@ function aktion(s, d) {
       if (d.phase === 'du') {
         for (let g = 1; g <= s.gruppen; g++) if (!s.duSchritt[g]) s.duSchritt[g] = 1;
       }
-      if (d.phase === 'besprechung' && !Object.keys(s.zeilen).length) zeilenZuteilen(s);
-      if (d.phase === 'reserve' && !Object.keys(s.reserve).length) aktion(s, { typ: 'reserveVerteilen' });
+      if (d.phase === 'zeichnung' && !Object.keys(s.funktion).length) funktionenVerteilen(s);
       return null;
     }
     case 'pause':
@@ -187,6 +182,7 @@ function aktion(s, d) {
         return `In Gruppe ${n + 1} oder höher sind noch Geräte angemeldet. Entferne sie zuerst.`;
       }
       s.gruppen = n;
+      if (Object.keys(s.funktion).length) funktionenVerteilen(s);
       return null;
     }
     case 'entfernen':
@@ -203,37 +199,9 @@ function aktion(s, d) {
       s.duSchritt = {};
       for (let g = 1; g <= s.gruppen; g++) s.duSchritt[g] = 1;
       return null;
-    case 'zeilenZuteilen':
-      zeilenZuteilen(s);
+    case 'funktionenVerteilen':
+      funktionenVerteilen(s);
       return null;
-    case 'zeileGruppe': {
-      const z = ganz(d.zeile, 1, SCHWERPUNKTE);
-      const g = ganz(d.gruppe, 1, s.gruppen);
-      if (!z || !g) return null;
-      s.zeilen[z] = g;
-      delete s.gewuerfelt[z];
-      return null;
-    }
-    case 'ohneExperte':
-      s.ohneExperte = !!d.an;
-      return null;
-    case 'wuerfeln': {
-      const z = ganz(d.zeile, 1, SCHWERPUNKTE);
-      if (!z || !s.zeilen[z]) return null;
-      let kandidaten = belegung(s, s.zeilen[z]);
-      if (s.ohneExperte && kandidaten.length > 1) kandidaten = kandidaten.filter(k => k !== z);
-      if (!kandidaten.length) return `In Gruppe ${s.zeilen[z]} ist niemand angemeldet.`;
-      // nicht zweimal hintereinander dieselbe Nummer, wenn es Alternativen gibt
-      if (kandidaten.length > 1 && s.gewuerfelt[z]) kandidaten = kandidaten.filter(k => k !== s.gewuerfelt[z]);
-      s.gewuerfelt[z] = kandidaten[crypto.randomInt(kandidaten.length)];
-      return null;
-    }
-    case 'reserveVerteilen': {
-      const exps = mischen([5, 6, 7, 8, 9]);
-      s.reserve = {};
-      for (let g = 1; g <= s.gruppen; g++) s.reserve[g] = exps[(g - 1) % exps.length];
-      return null;
-    }
     default:
       return 'Unbekannte Aktion.';
   }
@@ -267,10 +235,7 @@ function ausSicherung(snap) {
     return r;
   };
   s.duSchritt = zahlMap(snap.duSchritt, 1, s.gruppen, 1, SCHWERPUNKTE + 1);
-  s.zeilen = zahlMap(snap.zeilen, 1, SCHWERPUNKTE, 1, s.gruppen);
-  s.gewuerfelt = zahlMap(snap.gewuerfelt, 1, SCHWERPUNKTE, 1, SCHWERPUNKTE);
-  s.reserve = zahlMap(snap.reserve, 1, s.gruppen, 1, 20);
-  s.ohneExperte = !!snap.ohneExperte;
+  s.funktion = zahlMap(snap.funktion, 1, s.gruppen, 1, 20);
   return s;
 }
 

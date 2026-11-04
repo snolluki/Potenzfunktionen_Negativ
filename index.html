@@ -149,6 +149,7 @@ body.lk{font-size:20px;background:#f3f4f6}
 .timer .t{font-variant-numeric:tabular-nums;font-weight:800;font-size:1.3rem;min-width:3.2em;text-align:center}
 .timer.end .t{color:var(--bad);animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:.25}}
+.timer .tl{font-size:.85rem;color:var(--muted);white-space:nowrap}
 .timer button{border:0;background:none;font-size:1.2rem;cursor:pointer;padding:6px;min-width:40px;min-height:40px}
 .lk-main{padding:16px;display:grid;gap:16px}
 .cols2{display:grid;gap:16px;grid-template-columns:minmax(280px,380px) 1fr;align-items:start}
@@ -289,9 +290,8 @@ var R_START = 3;
 var PIN_COLORS = ['#16a34a', '#9333ea', '#db2777', '#ca8a04', '#0891b2'];
 var PHASEN = [
   { id: 'ich', name: 'Ich', min: 8 },
-  { id: 'du', name: 'Du', min: 9 },
-  { id: 'besprechung', name: 'Besprechung', min: 10 },
-  { id: 'reserve', name: 'Reserve', min: 7 }
+  { id: 'du', name: 'Du', min: 10 },
+  { id: 'zeichnung', name: 'Zeichnung', min: 5 }
 ];
 
 /* ================================================================== */
@@ -786,15 +786,12 @@ function schuelerApp() {
     modus = 'dabei';
     nachOben(v.phase + (v.pause ? 'p' : '') + (v.phase === 'du' ? v.du.schritt : ''));
     if (v.pause) {
-      return screen('<div class="big-msg"><div class="icon">✋</div><h2>Bitte schaut nach vorn</h2><p>Gleich geht es weiter.</p></div>');
+      return screen('<div class="big-msg"><div class="icon">✋</div><h2>Bitte legt das Gerät zur Seite</h2><p>Gleich geht es weiter.</p></div>');
     }
     var ph = v.phase, ich = v.ich;
-    if (ph === 'besprechung') {
-      return screen('<div class="big-msg"><div class="icon">🗣️</div><h2>Besprechung</h2><p>Schaut nach vorn. Ergänzt oder verbessert eure Übersicht in eigenen Worten.</p></div>');
-    }
-    if (ph === 'reserve') {
-      var r = v.reserve;
-      return screen('<div class="big-msg"><div class="icon">✏️</div><h2>Eure Funktion</h2><p class="math" style="font-size:2.4rem">' + (r ? 'f(x) = x<sup>−' + r + '</sup>' : '–') + '</p><p>Skizziert den Graphen in der Mitte eures Placemats. Beschriftet ihn mit den Eigenschaften aus eurer Übersicht.</p></div>');
+    if (ph === 'zeichnung') {
+      var r = v.funktion;
+      return screen('<div class="big-msg"><div class="icon">✏️</div><h2>Eure Funktion</h2><p class="math" style="font-size:2.4rem">' + (r ? 'f(x) = x<sup>−' + r + '</sup>' : '–') + '</p><p>Zeichnet den Graphen in das Koordinatensystem in der Mitte eures Placemats. Jede und jeder beschriftet ihn mit den Eigenschaften aus dem eigenen Schwerpunkt.</p><p>Legt das Gerät danach zur Seite.</p></div>');
     }
     if (ph === 'du') return duZeigen(v);
     // Ich-Phase
@@ -807,23 +804,23 @@ function schuelerApp() {
     var ich = v.ich, k = v.du.schritt;
     if (k > 5) {
       return screen('<div class="big-msg"><div class="icon">✅</div><h2>Alle Beobachtungen sind vorgestellt</h2>' + punkte(6) +
-        '<p>Prüft gemeinsam, ob in jeder Zeile eurer Übersicht etwas steht. Klärt offene Fragen, sodass jede und jeder von euch jede Zeile vorstellen kann.</p></div>');
+        '<p>Klärt offene Fragen, sodass jede und jeder von euch alle Beobachtungen erklären kann. Ihr braucht sie gleich für eure Zeichnung.</p></div>');
     }
     if (ich.sp !== k && v.du.experte) {
       // Zuhören: das Tool ist gesperrt
       return screen('<div class="big-msg"><div class="icon">👂</div><h2>Nr. ' + k + ' stellt vor</h2>' + punkte(k) +
         '<p><b>' + esc(SP[k].frage) + '</b></p>' +
-        '<p>Hör zu und notiere die Beobachtungen in Zeile ' + k + ' deiner Übersicht. Frag nach, wenn du etwas nicht verstehst.</p></div>');
+        '<p>Hör zu und frag nach, wenn du etwas nicht verstehst. Ihr braucht alle Beobachtungen gleich für eure Zeichnung.</p></div>');
     }
     var weiter = k < 5 ? 'weiter zu Nr. ' + (k + 1) : 'Runde beenden', h;
     if (ich.sp === k) {
       h = '<div class="du-box me"><h3>Du bist dran: Nr. ' + k + '</h3>' + punkte(k) +
-        '<p>Stelle deiner Gruppe deine Beobachtungen vor und zeige sie dabei am Graphen. Die anderen notieren sie in Zeile ' + k + ' ihrer Übersicht.</p>' +
+        '<p>Stelle deiner Gruppe deine Beobachtungen vor und zeige sie dabei am Graphen. Die anderen hören zu und fragen nach.</p>' +
         '<button class="btn ok" id="weiter">Fertig – ' + weiter + '</button></div>' + auftragHTML(k, false);
       hilfenZeigen(null);
     } else {
       h = '<div class="du-box"><h3>Nr. ' + k + ': gemeinsam untersuchen</h3>' + punkte(k) +
-        '<p>Diese Leitfrage hat in eurer Gruppe niemand bearbeitet. Untersucht sie jetzt gemeinsam und notiert eure Beobachtungen in Zeile ' + k + ' eurer Übersicht.</p>' +
+        '<p>Diese Leitfrage hat in eurer Gruppe niemand bearbeitet. Untersucht sie jetzt gemeinsam.</p>' +
         '<button class="btn" id="weiter">Fertig – ' + weiter + '</button></div>' + auftragHTML(k, true, true);
       hilfenZeigen(k);
     }
@@ -911,8 +908,12 @@ function lehrkraftApp() {
   var sitzung = speicher.getJSON('pfn_lk', null);   // { code, token }
   var z = null;                                       // Zustand vom Server
   var gebaut = null;                                  // Phase, für die der Inhalt gebaut wurde
-  var plot = null, zeile = 1, alteWuerfe = {};
+  var plot = null;
   var timer = { rest: 0, laeuft: false, t: null, phase: null };
+  var STANDARD_MIN = {};
+  PHASEN.forEach(function (p) { STANDARD_MIN[p.id] = p.min; });
+  var dauer = speicher.getJSON('pfn_dauer', null) || {};
+  PHASEN.forEach(function (p) { if (!(dauer[p.id] >= 1 && dauer[p.id] <= 60)) dauer[p.id] = p.min; });
 
   fetch('/config.json').then(function (r) { return r.json(); }).then(function (c) { cfg = c; if (!z) start(); }).catch(function () {});
 
@@ -928,7 +929,7 @@ function lehrkraftApp() {
     speicher.setJSON('pfn_lk_snap', {
       code: sitzung.code, token: sitzung.token, gruppen: z.gruppen, phase: z.phase,
       lernende: z.lernende.map(function (l) { return { id: l.id, gruppe: l.gruppe, sp: l.sp }; }),
-      duSchritt: z.duSchritt, zeilen: z.zeilen, gewuerfelt: z.gewuerfelt, ohneExperte: z.ohneExperte, reserve: z.reserve
+      duSchritt: z.duSchritt, funktion: z.funktion
     });
   }
   function zustandSetzen(neu) { z = neu; sichern(); zeichnen(); }
@@ -983,10 +984,10 @@ function lehrkraftApp() {
     });
   }
 
-  /* ----- Timer ----- */
+  /* ----- Timer (Dauer je Phase in Minuten einstellbar) ----- */
   function timerSetzen(phase) {
-    var p = PHASEN.filter(function (x) { return x.id === phase; })[0];
-    clearInterval(timer.t); timer.laeuft = false; timer.rest = (p ? p.min : 5) * 60; timer.phase = phase;
+    clearInterval(timer.t); timer.laeuft = false; timer.phase = phase;
+    timer.rest = (dauer[phase] || 5) * 60;
     timerZeigen();
   }
   function timerZeigen() {
@@ -995,6 +996,8 @@ function lehrkraftApp() {
     $('.t', el).textContent = m + ':' + (s < 10 ? '0' : '') + s;
     $('[data-tm="go"]', el).textContent = timer.laeuft ? '⏸' : '▶';
     el.classList.toggle('end', timer.rest <= 0);
+    var p = PHASEN.filter(function (x) { return x.id === timer.phase; })[0];
+    $('.tl', el).textContent = p ? p.name + ': ' + dauer[p.id] + ' Min.' : '';
   }
   function timerToggle() {
     if (timer.laeuft) { clearInterval(timer.t); timer.laeuft = false; }
@@ -1005,19 +1008,32 @@ function lehrkraftApp() {
     }
     timerZeigen();
   }
+  /** Dauer der aktuellen Phase um eine Minute ändern. Läuft der Timer, ändert sich auch die Restzeit. */
+  function timerMinute(d) {
+    var ph = timer.phase; if (!ph) return;
+    var neu = Math.max(1, Math.min(60, (dauer[ph] || 5) + d));
+    if (neu === dauer[ph]) return;
+    dauer[ph] = neu;
+    speicher.setJSON('pfn_dauer', dauer);
+    if (timer.laeuft) timer.rest = Math.max(0, timer.rest + d * 60);
+    else timer.rest = neu * 60;
+    timerZeigen();
+  }
 
   /* ----- Grundgerüst ----- */
   function geruest() {
     var tabs = PHASEN.map(function (p) { return '<button data-ph="' + p.id + '">' + p.name + '</button>'; }).join('');
     app.innerHTML = '<header class="top"><h1>Negative Exponenten</h1>' +
       '<div class="tabs">' + tabs + '<button class="pause" data-pause="1">✋ Geräte sperren</button></div>' +
-      '<div class="timer" id="timer"><span class="t">0:00</span><button data-tm="go" aria-label="Start/Pause">▶</button><button data-tm="re" aria-label="Zurücksetzen">↺</button></div>' +
+      '<div class="timer" id="timer"><button data-tm="minus" aria-label="Eine Minute weniger">−</button><span class="t">0:00</span><button data-tm="plus" aria-label="Eine Minute mehr">+</button><button data-tm="go" aria-label="Start/Pause">▶</button><button data-tm="re" aria-label="Zurücksetzen">↺</button><span class="tl"></span></div>' +
       '<span class="badge" id="codebadge"></span><button class="btn" id="menu" aria-label="Einstellungen">⚙</button></header>' +
       '<div class="lk-main" id="inhalt"></div>';
     $$('[data-ph]').forEach(function (b) { b.addEventListener('click', function () { aktion({ typ: 'phase', phase: b.getAttribute('data-ph') }); }); });
     $('[data-pause]').addEventListener('click', function () { aktion({ typ: 'pause', an: !z.pause }); });
     $('[data-tm="go"]').addEventListener('click', timerToggle);
     $('[data-tm="re"]').addEventListener('click', function () { timerSetzen(z.phase); });
+    $('[data-tm="minus"]').addEventListener('click', function () { timerMinute(-1); });
+    $('[data-tm="plus"]').addEventListener('click', function () { timerMinute(1); });
     $('#menu').addEventListener('click', menue);
   }
 
@@ -1029,6 +1045,7 @@ function lehrkraftApp() {
       '<div class="btns" style="flex-direction:column;align-items:stretch">' +
       '<button class="btn" data-m="voll">Vollbild an/aus</button>' +
       '<button class="btn" data-m="dureset">Vorstellungsrunde aller Gruppen auf Nr. 1 zurücksetzen</button>' +
+      '<button class="btn" data-m="zeitreset">Timer auf Standardzeiten zurücksetzen (Ich 8, Du 10, Zeichnung 5 Min.)</button>' +
       '<button class="btn" data-m="ende" style="color:var(--bad)">Stunde beenden (Daten löschen)</button>' +
       '<button class="btn primary" data-m="zu">Schließen</button></div></div>';
     document.body.appendChild(d);
@@ -1040,6 +1057,7 @@ function lehrkraftApp() {
       if (m === 'gm' || m === 'gp') { aktion({ typ: 'gruppenzahl', n: z.gruppen + (m === 'gp' ? 1 : -1) }); d.remove(); }
       if (m === 'voll') { if (document.fullscreenElement) document.exitFullscreen(); else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); d.remove(); }
       if (m === 'dureset') { aktion({ typ: 'duAlleNeu' }); d.remove(); }
+      if (m === 'zeitreset') { dauer = JSON.parse(JSON.stringify(STANDARD_MIN)); speicher.setJSON('pfn_dauer', dauer); timerSetzen(z.phase); d.remove(); }
       if (m === 'ende') { if (confirm('Stunde beenden? Alle Anmeldungen werden gelöscht.')) aktion({ typ: 'beenden' }); d.remove(); }
       if (m === 'zu') d.remove();
     });
@@ -1075,31 +1093,12 @@ function lehrkraftApp() {
         '<div style="display:grid;gap:16px"><div class="card" id="auftragLK"></div><div class="gcards" id="gcards"></div></div></div>';
       return;
     }
-    if (art === 'besprechung') {
-      el.innerHTML = '<div class="bespr"><div style="display:flex;flex-direction:column;gap:10px;min-height:0">' +
-        '<div class="toolbar"><span class="term math" id="bterm"></span><div style="min-width:220px">' + reglerHTML('bn') + '</div>' +
-        '<button class="btn" id="bpin">Graph festhalten</button><button class="btn" id="bclear">Löschen</button><button class="btn" id="bvgl">Vergleich: positiver Exponent</button></div>' +
-        graphHTML('bgbox').replace('class="graphbox"', 'class="graphbox" style="flex:1"') + '</div>' +
-        '<div class="bespr-side" id="rows"></div></div>';
-      plot = plotAnbinden($('#bgbox'), { font: 16 });
-      var bt = function () {
-        $('#bterm').innerHTML = termHTML(plot.n, true);
-        $('.toolbar [data-nv]').textContent = 'n = ' + minus(plot.n);
-        $('#bvgl').classList.toggle('on', plot.vergleich);
-      };
-      $('#bn').addEventListener('input', function () { plot.n = +this.value; plot.draw(); bt(); });
-      $('#bpin').addEventListener('click', function () { plot.festhalten(); });
-      $('#bclear').addEventListener('click', function () { plot.loeschen(); });
-      $('#bvgl').addEventListener('click', function () { plot.vergleich = !plot.vergleich; plot.draw(); bt(); });
-      plot.layout(); plot.draw(); bt();
-      return;
-    }
-    if (art === 'reserve') {
-      el.innerHTML = '<div class="card" style="font-size:1.4rem"><b>Skizziert den Graphen eurer Funktion in der Mitte eures Placemats.</b><br>Beschriftet ihn mit den Eigenschaften aus eurer Übersicht.</div>' +
+    if (art === 'zeichnung') {
+      el.innerHTML = '<div class="card" style="font-size:1.4rem"><b>Zeichnet den Graphen eurer Funktion in das Koordinatensystem in der Mitte eures Placemats.</b><br>Jede und jeder beschriftet ihn mit den Eigenschaften aus dem eigenen Schwerpunkt.</div>' +
         '<div class="res-list" id="reslist"></div>' +
         '<div class="btns"><button class="btn" id="resneu">Funktionen neu verteilen</button><button class="btn" id="ausblick">Ausblick zeigen</button></div>' +
         '<div class="card hidden" id="ausblicktext" style="font-size:1.6rem;text-align:center">Nächste Stunde: Was bewirkt der Faktor a in <span class="math">f(x) = a · x<sup>n</sup></span>?</div>';
-      $('#resneu').addEventListener('click', function () { aktion({ typ: 'reserveVerteilen' }); });
+      $('#resneu').addEventListener('click', function () { aktion({ typ: 'funktionenVerteilen' }); });
       $('#ausblick').addEventListener('click', function () { $('#ausblicktext').classList.remove('hidden'); });
     }
   }
@@ -1138,59 +1137,19 @@ function lehrkraftApp() {
     });
   }
 
-  function zeilenListe() {
-    var h = '<label style="display:flex;gap:8px;align-items:center;font-size:.95rem"><input type="checkbox" id="ohneEx"' + (z.ohneExperte ? ' checked' : '') + ' style="width:22px;height:22px"> Würfeln ohne die Person, die die Nummer selbst untersucht hat</label>';
-    for (var k = 1; k <= 5; k++) {
-      var gr = z.zeilen[k], w = z.gewuerfelt[k];
-      var opts = '';
-      for (var gi = 1; gi <= z.gruppen; gi++) opts += '<option value="' + gi + '"' + (gi === gr ? ' selected' : '') + '>Gruppe ' + gi + '</option>';
-      h += '<div class="row' + (k === zeile ? ' sel' : '') + '" data-zeile="' + k + '"><span class="nr">' + k + '</span><div class="mid"><b>' + esc(SP[k].kurz) + '</b>' +
-        '<select data-zg="' + k + '">' + opts + '</select></div>' +
-        '<button class="dice" data-w="' + k + '">' + (w ? '<span class="dn">Nr. ' + w + '</span>stellt vor' : '<span class="dn">🎲</span>würfeln') + '</button></div>';
-    }
-    h += '<div class="btns"><button class="btn" id="zneu">Zeilen neu zuteilen</button></div>';
-    $('#rows').innerHTML = h;
-    $('#ohneEx').addEventListener('change', function () { aktion({ typ: 'ohneExperte', an: this.checked }); });
-    $('#zneu').addEventListener('click', function () { if (confirm('Zeilen neu auf die Gruppen verteilen? Gewürfelte Ergebnisse werden gelöscht.')) aktion({ typ: 'zeilenZuteilen' }); });
-    $$('#rows [data-zeile]').forEach(function (r) {
-      r.addEventListener('click', function (e) {
-        if (e.target.closest('select,.dice')) return;
-        zeile = +r.getAttribute('data-zeile');
-        $$('#rows .row').forEach(function (x) { x.classList.toggle('sel', x === r); });
-      });
-    });
-    $$('#rows [data-zg]').forEach(function (s) { s.addEventListener('change', function () { aktion({ typ: 'zeileGruppe', zeile: +s.getAttribute('data-zg'), gruppe: +s.value }); }); });
-    $$('#rows [data-w]').forEach(function (b) { b.addEventListener('click', function () { aktion({ typ: 'wuerfeln', zeile: +b.getAttribute('data-w') }); }); });
-    for (var kk = 1; kk <= 5; kk++) {
-      if (z.gewuerfelt[kk] && alteWuerfe[kk] !== z.gewuerfelt[kk]) animieren(kk, z.gewuerfelt[kk]);
-    }
-    alteWuerfe = JSON.parse(JSON.stringify(z.gewuerfelt));
-  }
-  function animieren(k, ziel) {
-    var b = $('#rows [data-w="' + k + '"]'); if (!b) return;
-    var gr = z.zeilen[k], moegl = z.lernende.filter(function (l) { return l.gruppe === gr; }).map(function (l) { return l.sp; });
-    if (moegl.length < 2) return;
-    b.classList.add('rolling');
-    var i = 0, t = setInterval(function () {
-      b.innerHTML = '<span class="dn">Nr. ' + moegl[i++ % moegl.length] + '</span>…';
-      if (i > 9) { clearInterval(t); b.classList.remove('rolling'); b.innerHTML = '<span class="dn">Nr. ' + ziel + '</span>stellt vor'; }
-    }, 90);
-  }
-
   function aktualisieren() {
     if (z.phase === 'ich' || z.phase === 'du') {
       var anz = z.lernende.length;
-      $('#auftragLK').innerHTML = '<div class="ablauf"><span class="' + (z.phase === 'ich' ? 'on' : '') + '">Ich: allein</span><span class="' + (z.phase === 'du' ? 'on' : '') + '">Du: in der Gruppe</span><span>Besprechung</span></div>' +
+      $('#auftragLK').innerHTML = '<div class="ablauf"><span class="' + (z.phase === 'ich' ? 'on' : '') + '">Ich: allein</span><span class="' + (z.phase === 'du' ? 'on' : '') + '">Du: in der Gruppe</span><span>Zeichnung</span></div>' +
         (z.phase === 'ich'
           ? '<p style="font-size:1.3rem;margin:8px 0 0"><b>1.</b> Scanne den QR-Code. Wähle deine Gruppe und eine Nummer. Jede Nummer gibt es pro Gruppe nur einmal.<br><b>2.</b> Arbeite allein und leise. Notiere deine Beobachtungen in deinem Feld auf dem Placemat.</p>'
-          : '<p style="font-size:1.3rem;margin:8px 0 0">Nacheinander stellen Nr. 1 bis Nr. 5 ihre Beobachtungen vor und zeigen sie am eigenen Gerät.<br>Alle anderen hören zu und notieren die Beobachtungen in der passenden Zeile ihrer Übersicht.</p>') +
+          : '<p style="font-size:1.3rem;margin:8px 0 0">Nacheinander stellen Nr. 1 bis Nr. 5 ihre Beobachtungen vor und zeigen sie am eigenen Gerät.<br>Alle anderen hören zu und fragen nach. Ihr braucht alle Beobachtungen gleich für eure Zeichnung.</p>') +
         '<p style="color:var(--muted);margin:8px 0 0;font-size:1rem">' + anz + (anz === 1 ? ' Gerät' : ' Geräte') + ' angemeldet</p>';
       gruppenKarten();
     }
-    if (z.phase === 'besprechung' && plot) zeilenListe();
-    if (z.phase === 'reserve') {
+    if (z.phase === 'zeichnung') {
       var h = '';
-      for (var gi = 1; gi <= z.gruppen; gi++) h += '<div class="res-item"><span>Gruppe ' + gi + '</span><span class="math">f(x) = x<sup>−' + (z.reserve[gi] || '?') + '</sup></span></div>';
+      for (var gi = 1; gi <= z.gruppen; gi++) h += '<div class="res-item"><span>Gruppe ' + gi + '</span><span class="math">f(x) = x<sup>−' + (z.funktion[gi] || '?') + '</sup></span></div>';
       $('#reslist').innerHTML = h;
     }
   }
